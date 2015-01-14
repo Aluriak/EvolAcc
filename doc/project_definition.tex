@@ -17,7 +17,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%
 % PRÉAMBULE             %
 %%%%%%%%%%%%%%%%%%%%%%%%%
-\title{Project Definition} 
+\title{EvolAcc Project Definition} 
 \author{Lucas BOURNEUF}
 % empty for compilation date
 \date{} 
@@ -25,7 +25,7 @@
 % FORMAT PAGES         
 \pagestyle{fancy} 
         \lhead{} % left head
-        \chead{} % center head
+        \chead{EvolAcc Mendel} % center head
         \rhead{} % right head
         \lfoot{} % left foot
         \cfoot{\thepage/\pageref{LastPage}} % center foot
@@ -45,8 +45,13 @@
 % SECTION               %
 \section*{First words}
     \paragraph*{}
-    This document describes some ideas about a project of life simulator, designed 
-    for be a sandbox for artificial life. What is life, what are genes,... All theses definitions belong to next part.
+    This document describes some ideas about \textbf{EvolAcc} project of life simulator, designed 
+    for be a sandbox for artificial life. What is life, 
+    what are genes,... All theses definitions belong to next part.
+    \paragraph*{}
+    EvolAcc have a strong emphasis on modularity : the code is heavily modular,
+    and designed for terminal or final GUI users, and is also designed for 
+    integration inside Python projects, just like a Python module.
     \paragraph*{}
     Tools involved : 
     \begin{description}
@@ -56,6 +61,7 @@
             \item[ncurses] for terminal GUI;
             \item[git] for version managing, through \url{github.com};
             \item[pew] for environnement management;
+            \item[graphviz] for environnement management;
     \end{description}
     Python 3 is mainly battery included, but some \textit{pip installable} modules can be necessary. 
     (notabily for argument parsing, automatic JIT compilation,...)
@@ -64,39 +70,90 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 % SECTION               %
-\section*{Basic definitions}
+\section*{Units}
     \paragraph*{}
-    Each particle of Life can be seen as an object manipulate by an Environnement, defined by its Properties.
-    Environnement' space is divided in Square, and Environnement's time in phase.
-    A particle of Life, or just Life, have a knowledge of immediate neighbors\footnote{Moore neighbors, by example}.
-
+    Unit object is defined as a Proxy to componants that are stocked inside Unit itself.
+    Mutate, apply a phase (\textit{step}),… are operations asked to Units, which are 
+    relays them to their componants.
     \paragraph*{}
-    Life is defined mainly by a DNA sequence, composed of 0 and 1, or ATGC eventually. 
-    This DNA contains all information the Life will need for know what to do at each phase.
-    \begin{itemize}
-            \item definition of values (like maximum of amount of an element, see Add-ons part); 
-            \item behavior (with the help of a DNA compiler, see Tools part);  
-            \item DNA-linked values (see Transposons in Add-ons part); 
-    \end{itemize}
-
+    Componants are Genome, Property and Quantity instances, contained in a list.
+    Units with Genomes are considered like Life.
+    A Unit can have zero componants. 
     \paragraph*{}
-    Environnement is defined by a space divided in Square. Each of them can contains one or zero Life particle, 
-    and have some properties.
-    Property object can provides values like temperature, pression, current,...
-    These properties, when evolved, modify Natural Selection.
+    Each Unit can be seen as an object in an Environnement.
+    When a Unit is asked to step, it receive Environment as a context of runtime, 
+    and must return a boolean value, which is True iff Unit must be removed from
+    simulation. (mainly used by Life, for simulate dying)
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 % SECTION               %
-\section*{Add-ons}
+\section*{Environment}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% SECTION               %
+\section*{Genome and Genomes}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% SECTION               %
+    \section*{Objectives for version \textbf{0.1.0}}
     \paragraph*{}
-    Some ideas that need to be studied, when main parts will be done.
     \begin{description}
-            \item[Elements] each unit of Life have an amount of each elements (Energy, sugar,...) and can, by use of function, collect, transform and drop elements in Environnement; 
-            \item[Transposons] a not translated word of vocabulary in DNA can be recognize by special objects, like plasmids, that inserts themselves inside the sequence. 
-                    In result, we have modifications of genomes and transmission of plasmids.
+        \item[Primary tools] must be fonctionnal, notabily for UML and documentation production;
+        \item[Arch] of modules and git repository must be created;
+        \item[Simple] Environment with very simple and useless life should be runnable;
+        \item[Observer] of Environment that simply show in console a view of Life;
     \end{description}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% SECTION               %
+    \section*{Objectives for version \textbf{0.2.0}}
+    \paragraph*{}
+    \begin{description}
+        %\item[] ;
+    \end{description}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% SECTION               %
+\section*{Improvements for next versions}
+    \paragraph*{}
+    Main goals of next versions. Feasibility is considered OK and next updates can bring some of theses improvements.
+    \begin{description}
+            \item[Genome] integration of both Static and Dynamic Genome;
+            \item[Property] for allow definitions of environmental pressure and gradient of parameter;
+    \end{description}
+
+    \paragraph*{}
+    Planned functionnality. Maybe in a long time, but its something we want to see.
+    \begin{description}
+            \item[Quantity]: each unit of Life have an amount of each elements (Energy, sugar,...) and can, by use of function, collect, transform and drop elements in Environnement; 
+            \item[Transposons]: a not translated word of vocabulary in DNA can be recognize by special objects, like plasmids, that inserts themselves inside the sequence;
+                    In result, we have modifications of genomes and transmission of plasmids;
+            \item[Viruses] like transposons but for both Dynamic and Static Genome. Simply consider adding of Genome componant to already Genome possessor. Stranger DNA can be added to any life;
+            \item[DataSystem] EvolAcc Observer, designed for save and load Environment, Life configuration,… ;
+            \item[Phylogenient] EvolAcc Observer that creat a phylogenetic tree according to real evenments;
+            \item[Phylogenius] EvolAcc Observer that creat a phylogenetic tree according to final data, with bioinformatics methods;
+            \item[GUI] for final users, in Qt and/or ncurses;
+    \end{description}
+
+    \paragraph*{}
+    Some ideas that need to be studied, not expected before many updates.
+    \begin{description}
+            \item[Telemetrox] EvolAcc Observer that print data of current step in a webpage; 
+    \end{description}
+
 
 
 
@@ -104,83 +161,42 @@
 % SECTION               %
 \section*{Tools}
     \paragraph*{}
-    A very important tool is a DNA compiler, that transform DNA in fully valid Python source code, that can be validated and used.
-    Compilation of a Life particle DNA is performed at the particle creation, and when DNA change (see Transposons in Add-ons part).
-    \begin{lstlisting}[language=Python]
-        cc = DNACompiler(
-            alphabet='ab', 
-            vocabulary=['ka', 'me', 'ha']
-        )
-        # tables associate lexems to vocabulary
-        print(cc.tables) 
-        # >>>> {'aa':'ka', 'ab':'me', 'ba':ha', 'bb':''}
-        print(cc.compile('aaabbaabba')
-        # >>>> 'kamehameha'
-    \end{lstlisting}
-    This approach permit many things :
-    \begin{itemize}
-        \item production of Python code by simply defined the right templates and vocabulary;
-        \item genetic code redundancy because many lexems can generate the same values;
-        \item complexe behavior generation lexems can generate boolean operators, by examples;
-        \item garanted correctness when lexems lead to invalid code, it can be ignored;
-    \end{itemize}
-    \newpage
-
-    \paragraph*{}
-    Many functions can be provided, like access to genetic distance of a neighbor, Environnement's properties,...
-    Finally, complexes and adapted codes will appear : mutation of the DNA lead to modifications of the codes.
-
-    \paragraph*{}
-    For provide behavior, structure of the code can be always the same, and correspond to the regex [CA]*, where C are condition, and A an action.
-    By example, CCACACCAA is equivalent to :
-    \begin{lstlisting}[language=Python]
-        if cond1 and cond2:
-            action1()
-        if cond3:
-            action2()
-        if cond4 and cond5:
-            action3()
-            action4()
-    \end{lstlisting}
-    CCA is readed in DNA, and finally transcripted in Python code. 
-    More complete example :
-    \begin{lstlisting}[language=Python]
-        actions    = ['self.die']
-        conditions = ['world.temperature', 'self.age', 
-                      'self.resistance', '>']
-        cc = DNACompiler(alphabet='01', 
-                vocabulary\_actions=actions, 
-                vocabulary\_conditions=conditions
-        )
-        print(cc.tables)
-        # >>>> {
-                '000':('C', 'world.temperature'), 
-                '001':('C', 'self.age'), 
-                '010':('C', 'self.resistance'), 
-                '011':('A', 'self.die'), 
-                '100':('C', '>'),
-                '101':('V', ''), # value in the next lexem
-                '110':('?', '')
-                '111':('?', '')
-        }
-        print(cc.compile('000100101011001100101111011')
-        # >>>> """
-        if world.temperature() > self.resistance():
-            self.die()
-        if self.age() > 7: 
-            self.die()
-        """
-    \end{lstlisting}
-    Here, value is taked by read the next three bits (here, '111' so 7 in base 2). But it can be obtain by reread all DNA, by block of 8 bits, where each block is a value.
+    Lots of modules, libraries,… can be used for observers.
+    This section will certainly be quickly updated.
     
 
     
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 % SECTION               %
-\section*{Project Names}
+\section*{Versionning}
     \paragraph*{}
-    Lucas vote for a name like \textit{EvolAcc} with a subname like \textit{Argon}, \textit{Carbon}, or another element of the periodic table.
+    Use of SemVer versionning naming.\\
+    \textbf{EvolAcc} is the name of the project and of the final program.
+    Each major version will have a codename, taked from a famous biologist.\\
+    Moreover, each minor version will have a codename, 
+    taked from the Periodic Table of elements.
+    
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% SECTION               %
+\section*{Coding conventions}
+    \paragraph*{}
+    All python code must follow the PEP 8 recommendations\footnote{\url{https://www.python.org/dev/peps/pep-0008/}}, 
+    as possible, and according to the case, some deviations are allowed.
+    Objectives of conventions are \textbf{code clarity and uniformization}, not a PEP 8 inconditionnal respect. 
+    \paragraph*{}
+    Important points of coding conventions :
+    \begin{itemize}
+        \item 4 spaces by indentation;
+        \item snake case for methods, functions, variables and modules;
+        \item camel case for class names;
+        \item upper case for constants;
+    \end{itemize}
+    
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
