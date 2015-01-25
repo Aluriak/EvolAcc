@@ -1,13 +1,10 @@
-VIEWER=evince
+VIEWER=#evince
 SOURCE=project_definition
+SOURCE_EXT=mkd
 
-all: source clean
-
-clean:
-	- rm *.aux *.log 
+all: source
 
 source:
-	pdflatex $(SOURCE).tex && pdflatex $(SOURCE).tex
-	$(VIEWER) $(SOURCE).pdf
+	$(VIEWER) $(SOURCE).$(SOURCE_EXT)
 
 

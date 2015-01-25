@@ -1,0 +1,161 @@
+# EvolAcc Project Definition
+## First words
+
+This document describes some ideas about _EvolAcc_ project of life simulator, designed 
+for be a sandbox for artificial life. What is life, 
+what are genes,... All theses definitions belong to next part.
+
+EvolAcc have a strong emphasis on modularity : the code is heavily modular,
+and designed for terminal or final GUI users, and is also designed for 
+integration inside Python projects, just like a Python module.
+
+Tools involved : 
+
+- _Python 3_ for main code; 
+- _C/C++_ for optimizations;
+- _Qt_ for GUI; 
+- _ncurses_ for terminal GUI;
+- _git_ for version managing, through [github](http://github.com/aluriak/evolacc);
+- _pew_ for environnement management;
+- _graphviz_ for environnement management;
+
+Python 3 is mainly battery included, but some *pip installable* modules can be necessary. 
+(notabily for argument parsing, automatic JIT compilation,...)
+
+
+
+
+
+## Units
+
+Unit object is defined as a Proxy to componants that are stocked inside Unit itself.
+Mutate, apply a phase (*step*),… are operations asked to Units, which are 
+relays them to their componants.
+
+Componants are Genome, Property and Quantity instances, contained in a list (or set).
+Units with Genomes are considered like Life.
+A Unit can have zero componants. 
+
+Each Unit can be seen as an object in an Environnement.
+When a Unit is asked to step, it receive Environment as a context of runtime, 
+and must return a boolean value, which is True iff Unit must be removed from
+simulation. (mainly used by Life, for simulate dying)
+
+
+
+
+
+## Environment
+
+
+
+
+
+## Genome and Genomes
+
+
+
+
+
+
+## Objectives for version _0.1.0_
+
+
+- _Primary tools_ must be fonctionnal, notabily for UML and documentation production;
+- _Arch_ of core modules and git repository must be created;
+- _Simple_ Environment with very simple and useless life should be runnable;
+- _Observer_ of Environment that simply show in console a view of Life;
+
+
+
+## Objectives for version _0.2.0_
+
+
+
+
+
+
+
+
+
+
+## Improvements for next versions
+
+Main goals of next versions. Feasibility is considered OK and next updates can bring some of theses improvements.
+
+- _Genome_ integration of both Static and Dynamic Genome;
+- _Property_ for allow definitions of environmental pressure and gradient of parameter;
+
+
+
+Planned functionnality. Maybe in a long time, but its something we want to see.
+
+- _Quantity_: each unit of Life have an amount of each elements (Energy, sugar,...) and can, by use of function, collect, transform and drop elements in Environnement; 
+- _Transposons_: a not translated word of vocabulary in DNA can be recognize by special objects, like plasmids, that inserts themselves inside the sequence;
+In result, we have modifications of genomes and transmission of plasmids;
+- _Viruses_ like transposons but for both Dynamic and Static Genome. Simply consider adding of Genome componant to already Genome possessor. Stranger DNA can be added to any life;
+- _DataSystem_ EvolAcc Observer, designed for save and load Environment, Life configuration,… ;
+- _Phylogenient_ EvolAcc Observer that creat a phylogenetic tree according to real evenments;
+- _Phylogenius_ EvolAcc Observer that creat a phylogenetic tree according to final data, with bioinformatics methods;
+- _GUI_ for final users, in Qt and/or ncurses;
+
+
+
+Some ideas that need to be studied, not expected before many updates.
+
+- _Telemetrox_ EvolAcc Observer that print data of current step in a webpage; 
+
+
+
+
+
+
+
+## Tools
+
+Lots of modules, libraries,… can be used for observers.
+This section will certainly be quickly updated.
+
+
+
+
+
+
+## Versionning
+
+Use of SemVer versionning naming.  
+_EvolAcc_ is the name of the project and of the final program.
+Each major version will have a codename, taked from a famous biologist.  
+Moreover, each minor version will have a codename, 
+taked from the Periodic Table of elements.
+
+
+
+
+
+
+## Coding conventions
+
+All python code must follow the [PEP 8 recommendations](https://www.python.org/dev/peps/pep-0008/)
+as possible, and according to the case, some deviations are allowed.
+Objectives of conventions are _code clarity and uniformization_, not a PEP 8 inconditionnal respect. 
+
+Important points of coding conventions :
+
+-  4 spaces by indentation;
+-  snake case for methods, functions, variables and modules;
+-  camel case for class names;
+-  upper case for constants;
+
+
+
+
+
+
+
+
+
+
+
+
+
