@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 #########################
-#       OBSERVER        #
+#       SIMULATION      #
 #########################
 
 
 #########################
 # IMPORTS               #
 #########################
+from evolacc.observer import Observable
+from evolacc.placing  import Placer
 
 
 
@@ -20,11 +22,14 @@
 #########################
 # CLASS                 #
 #########################
-class Observer:
+class Simulation(Observable):
     """
-    Observer according to Observer Pattern.
-    Abstract class.
+    A Simulation is a composition of Units through objects like Placer.
+
+    Simulation is Observable.
     """
+
+
 # CONSTRUCTOR #################################################################
 # PUBLIC METHODS ##############################################################
 # PRIVATE METHODS #############################################################

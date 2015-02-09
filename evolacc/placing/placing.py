@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #########################
-#       SPACE UNIT      #
+#       PLACING         #
 #########################
 
 
@@ -20,6 +20,13 @@
 #########################
 # CLASS                 #
 #########################
+class Placer(dict):
+    """
+    Dictionnary and generalist placer of objects in a N-dimensions world.
+    Keys are coordinates, and values the object placed at associates coordinates.
+
+    Provide access to neighbors through many methods.
+    """
 # CONSTRUCTOR #################################################################
 # PUBLIC METHODS ##############################################################
 # PRIVATE METHODS #############################################################

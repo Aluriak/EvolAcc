@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #########################
-#       OBSERVER        #
+#       UNIT            #
 #########################
 
 
@@ -20,10 +20,10 @@
 #########################
 # CLASS                 #
 #########################
-class Observer:
+class Unit:
     """
-    Observer according to Observer Pattern.
-    Abstract class.
+    Unit of life/environment.
+    Composite of Components.
     """
 # CONSTRUCTOR #################################################################
 # PUBLIC METHODS ##############################################################

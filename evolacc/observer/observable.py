@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 #########################
-#       OBSERVABLE      #
+#       OBSERVABLE            
 #########################
-
 
 
 #########################
@@ -19,38 +18,27 @@
 
 
 #########################
-# OBSERVABLE CLASS      #
+# CLASS                 #
 #########################
-class Observable():
+class Observable:
     """
-    Implementation of Observable interface, according to Observer Pattern.
+    Observable according to Observer Pattern.
+    Abstract class.
     """
-
-
 # CONSTRUCTOR #################################################################
-    def __init__(self):
-        self.observers = set()
-
-
-    def register_observer(self, observer):
-        """Registering observable"""
-        self.observers.add(observer)
-
-
-    def deregister_observer(self, observer):
-        """Deregistering observable"""
-        self.observers.remove(observer)
-
-
 # PUBLIC METHODS ##############################################################
-    def notify(self):
-        """Notify observers"""
-        for o in self.observers:
-            o.update()
+# PRIVATE METHODS #############################################################
+# PREDICATS ###################################################################
+# ACCESSORS ###################################################################
+# CONVERSION ##################################################################
+# OPERATORS ###################################################################
 
 
 
 
-if __name__ == '__main__':
-    pass
+#########################
+# FUNCTIONS             #
+#########################
+
+
 

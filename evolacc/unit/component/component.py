@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #########################
-#       OBSERVER        #
+#       COMPONENT       #
 #########################
 
 
@@ -20,10 +20,10 @@
 #########################
 # CLASS                 #
 #########################
-class Observer:
+class Component:
     """
-    Observer according to Observer Pattern.
-    Abstract class.
+    Abstract class that describes component of a Unit.
+    Genome, Property and Quantity are example of Component realizations.
     """
 # CONSTRUCTOR #################################################################
 # PUBLIC METHODS ##############################################################

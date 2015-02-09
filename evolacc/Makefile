@@ -1,5 +1,5 @@
 all:
-	python3 main.py
+	python3 __main__.py
 
 tt:
 	python3 unittests.py
