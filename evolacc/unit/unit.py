@@ -2,6 +2,11 @@
 #########################
 #       UNIT            #
 #########################
+"""
+A Unit is the very basic unit of something in a Simulation.
+Unit a composite of Component instances.
+Unit can represent particles of environment or unit of life.
+"""
 
 
 #########################
