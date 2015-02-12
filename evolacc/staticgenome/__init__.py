@@ -1,1 +1,1 @@
-from staticgenome import *
+from evolacc.staticgenome.staticgenome import *

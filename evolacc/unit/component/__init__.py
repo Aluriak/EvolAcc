@@ -1,3 +1,3 @@
-from evolacc.component.component.component import *
-from evolacc.component.component.genome    import *
-from evolacc.component.component.property  import *
+from evolacc.unit.component.component import *
+from evolacc.unit.component.genome    import *
+from evolacc.unit.component.property  import *
