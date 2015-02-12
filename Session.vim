@@ -21,16 +21,26 @@ badd +0 evolacc/unit/component/genome.py
 badd +0 evolacc/staticgenome/staticgenome.py
 badd +0 evolacc/observer/videocreator/videocreator.py
 badd +0 evolacc/observer/imagegenerator/imagegenerator.py
+badd +7 evolacc/unit/unitfactory.py
+badd +22 evolacc/unittests.py
+badd +0 unittests.py
+badd +1 evolacc/factory/unitfactory.py
 argglobal
 silent! argdel *
 argadd ~/Programmation/Projets/EvolAcc/EvolAcc/evolacc/__main__.py
 set stal=2
 edit evolacc/__main__.py
 set splitbelow splitright
+wincmd _ | wincmd |
+vsplit
+1wincmd h
+wincmd w
 set nosplitbelow
 set nosplitright
 wincmd t
 set winheight=1 winwidth=1
+exe 'vert 1resize ' . ((&columns * 119 + 119) / 239)
+exe 'vert 2resize ' . ((&columns * 119 + 119) / 239)
 argglobal
 setlocal fdm=manual
 setlocal fde=0
@@ -47,7 +57,29 @@ exe s:l
 normal! zt
 114
 normal! 0
-tabedit evolacc/simulation/simulation.py
+wincmd w
+argglobal
+edit unittests.py
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 20 - ((19 * winheight(0) + 28) / 56)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+20
+normal! 030|
+lcd ~/Programmation/Projets/EvolAcc/EvolAcc
+wincmd w
+exe 'vert 1resize ' . ((&columns * 119 + 119) / 239)
+exe 'vert 2resize ' . ((&columns * 119 + 119) / 239)
+tabedit ~/Programmation/Projets/EvolAcc/EvolAcc/evolacc/simulation/simulation.py
 set splitbelow splitright
 set nosplitbelow
 set nosplitright
@@ -63,12 +95,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 84 - ((55 * winheight(0) + 28) / 56)
+let s:l = 1 - ((0 * winheight(0) + 28) / 56)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-84
-normal! 0
+1
+normal! 023|
 lcd ~/Programmation/Projets/EvolAcc/EvolAcc
 tabedit ~/Programmation/Projets/EvolAcc/EvolAcc/evolacc/placing/placing.py
 set splitbelow splitright
@@ -91,7 +123,7 @@ if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
 1
-normal! 0
+normal! 023|
 lcd ~/Programmation/Projets/EvolAcc/EvolAcc
 tabedit ~/Programmation/Projets/EvolAcc/EvolAcc/evolacc/action/basic_actions.py
 set splitbelow splitright
@@ -115,12 +147,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 35 - ((34 * winheight(0) + 28) / 56)
+let s:l = 38 - ((37 * winheight(0) + 28) / 56)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-35
-normal! 033|
+38
+normal! 024|
 lcd ~/Programmation/Projets/EvolAcc/EvolAcc
 wincmd w
 argglobal
@@ -160,11 +192,34 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 50 - ((45 * winheight(0) + 28) / 56)
+let s:l = 36 - ((35 * winheight(0) + 28) / 56)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-50
+36
+normal! 05|
+lcd ~/Programmation/Projets/EvolAcc/EvolAcc
+tabedit ~/Programmation/Projets/EvolAcc/EvolAcc/evolacc/factory/unitfactory.py
+set splitbelow splitright
+set nosplitbelow
+set nosplitright
+wincmd t
+set winheight=1 winwidth=1
+argglobal
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 1 - ((0 * winheight(0) + 28) / 56)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+1
 normal! 0
 lcd ~/Programmation/Projets/EvolAcc/EvolAcc
 tabedit ~/Programmation/Projets/EvolAcc/EvolAcc/evolacc/unit/component/component.py
@@ -208,12 +263,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 33 - ((32 * winheight(0) + 28) / 56)
+let s:l = 10 - ((9 * winheight(0) + 28) / 56)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-33
-normal! 0
+10
+normal! 027|
 lcd ~/Programmation/Projets/EvolAcc/EvolAcc
 wincmd w
 exe 'vert 1resize ' . ((&columns * 119 + 119) / 239)
@@ -263,11 +318,11 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 23 - ((22 * winheight(0) + 28) / 56)
+let s:l = 20 - ((19 * winheight(0) + 28) / 56)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-23
+20
 normal! 015|
 lcd ~/Programmation/Projets/EvolAcc/EvolAcc
 wincmd w
@@ -315,7 +370,7 @@ normal! zt
 27
 normal! 020|
 lcd ~/Programmation/Projets/EvolAcc/EvolAcc
-tabnext 9
+tabnext 6
 set stal=1
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf
