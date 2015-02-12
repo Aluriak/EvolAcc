@@ -7,7 +7,7 @@
 #########################
 # IMPORTS               #
 #########################
-from evolacc.unit import Component
+from evolacc.unit.component import Component
 
 
 
