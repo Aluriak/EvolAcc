@@ -33,7 +33,7 @@ class Unit:
 
 
 # CONSTRUCTOR #################################################################
-    def __init__(self, components=None)
+    def __init__(self, components=None):
         """Wait for an iterable of already initialized components
         Initialized with zero components if not provided"""
         self.components = set(components) if components is not None else []
