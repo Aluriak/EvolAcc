@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 #########################
-#       COMPONENT       #
+#       GENOME          #
 #########################
 
 
 #########################
 # IMPORTS               #
 #########################
-
+from evolacc.unit import Component
 
 
 
@@ -18,12 +18,15 @@
 
 
 #########################
-# CLASS                 #
+# GENOME CLASS          #
 #########################
-class Component:
+class Genome(Component):
     """
-    Abstract class that describes component of a Unit.
-    Genome, Property and Quantity are example of Component realizations.
+    A Genome is something that can add Actions to Simulation.
+    Its also a proof of life.
+
+    Its something like an Abstract class, because there is many 
+    way to implement that.
     """
 
 # CONSTRUCTOR #################################################################
@@ -31,9 +34,8 @@ class Component:
 # PRIVATE METHODS #############################################################
 # PREDICATS ###################################################################
     def is_life(self):
-        """Return false, because by default 
-        a component is not a proof of life"""
-        return False
+        """Return True""" 
+        return True
 
 
 # ACCESSORS ###################################################################

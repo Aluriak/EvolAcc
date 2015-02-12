@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #########################
-#       COMPONENT       #
+#       PROPERTY            
 #########################
 
 
@@ -20,22 +20,10 @@
 #########################
 # CLASS                 #
 #########################
-class Component:
-    """
-    Abstract class that describes component of a Unit.
-    Genome, Property and Quantity are example of Component realizations.
-    """
-
 # CONSTRUCTOR #################################################################
 # PUBLIC METHODS ##############################################################
 # PRIVATE METHODS #############################################################
 # PREDICATS ###################################################################
-    def is_life(self):
-        """Return false, because by default 
-        a component is not a proof of life"""
-        return False
-
-
 # ACCESSORS ###################################################################
 # CONVERSION ##################################################################
 # OPERATORS ###################################################################
