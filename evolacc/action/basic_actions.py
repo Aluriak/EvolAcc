@@ -18,7 +18,7 @@ from evolac.action.action import Action
 
 
 #########################
-# CLASS                 #
+# KILL ACTION           #
 #########################
 class Kill(Action):
     """
@@ -34,7 +34,7 @@ class Kill(Action):
 # PUBLIC METHODS ##############################################################
     def execute(self, simulation):
         """ Delete unit in given simulation """
-        assert(self.coords in simulation.placer) #TODO: replace that by logging
+        assert(simulation.placer.validate(self.coords)) #TODO: replace that by logging
         del simulation.placer[self.coords]
 
 # PRIVATE METHODS #############################################################
