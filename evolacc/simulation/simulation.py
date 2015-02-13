@@ -52,6 +52,10 @@ class Simulation(Observable):
             unit.step(self, coords)
         self._invoke_actions()
 
+    def add(self, action):
+        """Add given action to actions stack"""
+        self.actions.append(action)
+
 
 # PRIVATE METHODS #############################################################
     def _invoke_actions(self):
