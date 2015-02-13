@@ -17,19 +17,23 @@ badd +1 evolacc/observer/observable.py
 badd +1 evolacc/observer/observer.py
 badd +1 evolacc/placing/placing.py
 badd +1 evolacc/action/basic_actions.py
-badd +0 evolacc/unit/component/genome.py
-badd +0 evolacc/staticgenome/staticgenome.py
-badd +0 evolacc/observer/videocreator/videocreator.py
-badd +0 evolacc/observer/imagegenerator/imagegenerator.py
+badd +1 evolacc/unit/component/genome.py
+badd +1 evolacc/staticgenome/staticgenome.py
+badd +1 evolacc/observer/videocreator/videocreator.py
+badd +1 evolacc/observer/imagegenerator/imagegenerator.py
 badd +7 evolacc/unit/unitfactory.py
 badd +22 evolacc/unittests.py
-badd +0 unittests.py
+badd +20 unittests.py
 badd +1 evolacc/factory/unitfactory.py
+badd +151 evolacc/configparser/configparser.py
+badd +1 evolacc/config/configparser.py
+badd +1 evolacc/config/config.py
+badd +0 evolacc/evolacc/evolacc.py
 argglobal
 silent! argdel *
 argadd ~/Programmation/Projets/EvolAcc/EvolAcc/evolacc/__main__.py
 set stal=2
-edit evolacc/__main__.py
+edit evolacc/evolacc/evolacc.py
 set splitbelow splitright
 wincmd _ | wincmd |
 vsplit
@@ -51,15 +55,16 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 114 - ((55 * winheight(0) + 28) / 56)
+let s:l = 7 - ((6 * winheight(0) + 28) / 56)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-114
+7
 normal! 0
+lcd ~/Programmation/Projets/EvolAcc/EvolAcc
 wincmd w
 argglobal
-edit unittests.py
+edit ~/Programmation/Projets/EvolAcc/EvolAcc/evolacc/__main__.py
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -69,12 +74,63 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 20 - ((19 * winheight(0) + 28) / 56)
+let s:l = 23 - ((16 * winheight(0) + 28) / 56)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-20
-normal! 030|
+23
+normal! 0
+lcd ~/Programmation/Projets/EvolAcc/EvolAcc
+wincmd w
+exe 'vert 1resize ' . ((&columns * 119 + 119) / 239)
+exe 'vert 2resize ' . ((&columns * 119 + 119) / 239)
+tabedit ~/Programmation/Projets/EvolAcc/EvolAcc/evolacc/config/config.py
+set splitbelow splitright
+wincmd _ | wincmd |
+vsplit
+1wincmd h
+wincmd w
+set nosplitbelow
+set nosplitright
+wincmd t
+set winheight=1 winwidth=1
+exe 'vert 1resize ' . ((&columns * 119 + 119) / 239)
+exe 'vert 2resize ' . ((&columns * 119 + 119) / 239)
+argglobal
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 69 - ((18 * winheight(0) + 28) / 56)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+69
+normal! 04|
+lcd ~/Programmation/Projets/EvolAcc/EvolAcc
+wincmd w
+argglobal
+edit ~/Programmation/Projets/EvolAcc/EvolAcc/unittests.py
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 1 - ((0 * winheight(0) + 28) / 56)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+1
+normal! 0
 lcd ~/Programmation/Projets/EvolAcc/EvolAcc
 wincmd w
 exe 'vert 1resize ' . ((&columns * 119 + 119) / 239)
@@ -147,12 +203,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 38 - ((37 * winheight(0) + 28) / 56)
+let s:l = 10 - ((9 * winheight(0) + 28) / 56)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-38
-normal! 024|
+10
+normal! 012|
 lcd ~/Programmation/Projets/EvolAcc/EvolAcc
 wincmd w
 argglobal
@@ -370,7 +426,7 @@ normal! zt
 27
 normal! 020|
 lcd ~/Programmation/Projets/EvolAcc/EvolAcc
-tabnext 6
+tabnext 1
 set stal=1
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf
