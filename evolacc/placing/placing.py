@@ -2,12 +2,26 @@
 #########################
 #       PLACING         #
 #########################
+"""
+
+Unit tests:
+    >>> from evolacc.placing import Placer
+    >>> p = Placer(2)
+    >>> _ = [p.place(str((x,y)), (x,y)) for x in range(10) for y in range(10)]
+    >>> p.moore_neighbors((3, 3))
+    ['(2, 2)', '(2, 3)', '(2, 4)', '(3, 2)', '(3, 4)', '(4, 2)', '(4, 3)', '(4, 4)']
+    >>> p.moore_neighbors((0, 3))
+    ['(0, 2)', '(0, 4)', '(1, 2)', '(1, 3)', '(1, 4)']
+    >>> p.moore_neighbors((0, 0))
+    ['(0, 1)', '(1, 0)', '(1, 1)']
+
+"""
 
 
 #########################
 # IMPORTS               #
 #########################
-
+from itertools import product
 
 
 
@@ -43,6 +57,25 @@ class Placer(dict):
         self[coords] = objct
         return previous
 
+    def moore_neighbors(self, coords):
+        """Return list of placed objects that are moore neighbors 
+        of given coords.
+        """
+        assert(self.validate(coords))
+        sum_coords = lambda x, y: tuple([a+b for a,b in zip(x, y)])
+        # get all exact coords of potential moore_neighbors
+        neis = [
+            sum_coords(nei_rel_coords, coords)
+            for nei_rel_coords in product((-1, 0, 1), repeat=len(coords))
+        ]
+        # get object for those are defined
+        neis = [
+            self[nei_coords]
+            for nei_coords in neis
+            if coords != nei_coords and nei_coords in self
+        ]
+        return neis
+
 
 # PRIVATE METHODS #############################################################
 # PREDICATS ###################################################################
@@ -61,6 +94,5 @@ class Placer(dict):
 #########################
 # FUNCTIONS             #
 #########################
-
 
 
