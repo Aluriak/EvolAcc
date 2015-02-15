@@ -93,19 +93,7 @@ def __parse_from_doc(docstring):
                    for k,v in args.items() 
                    if v is not None and k.startswith('-')}
 
-    # universe size must be treat as a list of integer
-    if UNIVERSE_SIZE in config_args:
-        config_args[UNIVERSE_SIZE] = tuple((
-            int(_) for _ in config_args[UNIVERSE_SIZE].split(',')
-        ))
-
-    # import users genomes
-    if GENOMES_CLASSES in config_args:
-        config_args[GENOMES_CLASSES] = __import_user_genomes(
-            config_args[GENOMES_CLASSES]
-        )
-
-    return config_args
+    return __converted(config_args)
 
 
 
@@ -119,7 +107,16 @@ def __parse_from_file(filename=FILENAME_CONFIG):
     Wait optionnaly the config filename.
     NOT IMPLEMENTED
     """
-    return {}
+    try:
+        with open(filename, 'r') as f:
+            payload = json.load(f)
+        conf = __converted(payload)
+    except FileNotFoundError:
+        print('File ' + filename + ' not found !')
+        print('Default configuration will be used.')
+        conf = {}
+    finally:
+        return conf
 
 
 
@@ -133,6 +130,55 @@ def __default_configuration():
     NOT IMPLEMENTED
     """
     return {}
+
+
+
+
+#########################
+# NORMALIZED            #
+#########################
+def __normalized(configuration):
+    """
+    Return a normalized copy of given configuration.
+    Converts all fields that required a conversion.
+    For example:
+        - functions/classes are replaced by their names.
+        - non-string objects are converted in string.
+    This function is the complementary of __converted, 
+    and return a serializable view of given configuration.
+    """
+    return NotImplemented
+
+
+
+
+#########################
+# CONVERTED             #
+#########################
+def __converted(configuration):
+    """
+    Return a converted copy of given configuration.
+    Converts all fields that required a conversion.
+    For example:
+        - functions/classes names are imported 
+            and replaced by functions/classes themselves.
+        - string are converted in integer, float, list…
+    This function is the complementary of __normalized,
+    and return usable view of given configuration.
+    """
+    configuration = dict(configuration)
+    # universe size must be treat as a list of integer
+    if UNIVERSE_SIZE in configuration:
+        configuration[UNIVERSE_SIZE] = tuple((
+            int(_) for _ in configuration[UNIVERSE_SIZE].split(',')
+        ))
+
+    # import users genomes
+    if GENOMES_CLASSES in configuration:
+        configuration[GENOMES_CLASSES] = __import_user_genomes(
+            configuration[GENOMES_CLASSES]
+        )
+    return configuration
 
 
 
