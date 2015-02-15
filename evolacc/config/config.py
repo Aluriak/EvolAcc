@@ -23,7 +23,8 @@ trigger saving or loading of (non-)existing configurations.
 #########################
 # IMPORTS               #
 #########################
-from evolacc.unit.component import Genome
+from evolacc.staticgenome   import Genome
+from evolacc.unit.component import Component
 
 from collections import ChainMap
 from docopt      import docopt
@@ -44,7 +45,7 @@ DIRCNAME_USER_GENOMES = 'evolacc/usergenomes/'
 FILENAME_CONFIG       = 'data/inputs/config.json'
 # configuration keys
 UNIVERSE_SIZE   = 'universe_size'
-GENOMES_CLASSES = 'genomes_classes'
+GENOMES_CLASSES = 'genomes'
 CONFIG_FILE     = 'config_file'
 
 
@@ -176,7 +177,7 @@ def __converted(configuration):
     # import users genomes
     if GENOMES_CLASSES in configuration:
         configuration[GENOMES_CLASSES] = __import_user_genomes(
-            configuration[GENOMES_CLASSES]
+            configuration[GENOMES_CLASSES].split(',')
         )
     return configuration
 
@@ -196,6 +197,7 @@ def __import_user_genomes(genomes):
     If a class is not found, no error will be reported.
     If a class is not a Genome subclass, an error will be reported.
     """
+    remain_genomes = set(genomes)
     classes = []
     # open python modules in user genomes directory
     # ex: 'evolacc/usergenomes/thing.py' -> 'evolacc.usergenomes.thing'
@@ -208,12 +210,22 @@ def __import_user_genomes(genomes):
         # import user module
         module = importlib.import_module(module, package='evolacc')
         # collect expected classes
-        for cls in module.__dict__.keys():
-             if cls in module.__dict__:
-                classes.append(module.__getattribute__(cls))
+        for attr_name in module.__dict__.keys():
+            attr = module.__getattribute__(attr_name)
+            if attr_name in genomes:
+                remain_genomes.remove(attr_name)
+                if issubclass(attr, Genome):
+                    classes.append(attr)
+                else:
+                    print('WARNING: ' + attr_name + ' is not a Genome realization.') # TODO: replace by logging
     # verify and attach collected genomes to args configuration
     assert(all(issubclass(usergenome, Genome) for usergenome in classes)) # TODO: replace by logging
-    return classes
+    if len(remain_genomes) > 0:
+        # TODO: replace by logging
+        print("WARNING: Genomes not found: "
+              + ','.join((str(g) for g in remain_genomes))
+             )
+    return classes, remain_genomes
 
 
 
