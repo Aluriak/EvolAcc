@@ -11,6 +11,7 @@ from evolacc.observer import Observable
 from evolacc.placing  import Placer
 from evolacc.unit     import Unit
 
+from evolacc.config   import UNIVERSE_SIZE, FACTORY
 
 
 
@@ -37,6 +38,13 @@ class Simulation(Observable):
         self.configuration = configuration
         self.actions = []
         self.placer  = Placer()
+        # call factory for each place in the world
+        for coords in Placer.all_coordinates(configuration[UNIVERSE_SIZE]):
+            # its impossible to have to object at the same place
+            assert(None is self.placer.place(
+                # place a factory generated Unit at generated coords
+                configuration[FACTORY].create(self, coords), coords
+            ))
 
 
 # PUBLIC METHODS ##############################################################
