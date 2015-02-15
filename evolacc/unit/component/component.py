@@ -27,7 +27,17 @@ class Component:
     """
 
 # CONSTRUCTOR #################################################################
+    def __init__(self, simulation, coords=None):
+        """Get simulation and coords of Unit in it"""
+        pass
+
+
 # PUBLIC METHODS ##############################################################
+    def step(self, simulation, coords):
+        """Compute next step in simulation.
+        Coords are the coords of self in simulation."""
+        raise NotImplementedError
+
 # PRIVATE METHODS #############################################################
 # PREDICATS ###################################################################
     def is_life(self):
