@@ -11,9 +11,11 @@ It will be the main way to use EvolAcc without GUI.
 
 
 Usage:
-    __main__.py [--universe_size=COUNT[,COUNT]] [--genomes=TEXT]
+    __main__.py [options] 
 
 Options:
+    --universe_size=COUNT[,COUNT]   size of universe in each dimension
+    --genomes=NAME[,NAME]           names of Genome classes used
 """
 
 #########################
