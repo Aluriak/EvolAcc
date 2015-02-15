@@ -40,6 +40,8 @@ import os
 #########################
 # PRE-DECLARATIONS      #
 #########################
+# package
+PKG_NAME = 'evolacc'
 # directories and files
 DIRCNAME_USER         = 'evolacc/userdata/'
 DIRCNAME_USER_GENOMES = DIRCNAME_USER    +'genomes/'
@@ -231,7 +233,7 @@ def __import_user_genomes(genomes):
     # collect all expected classes in usergenomes list
     for module in modules:
         # import user module
-        module = importlib.import_module(module, package='evolacc')
+        module = importlib.import_module(module, package=PKG_NAME)
         # collect expected classes
         for attr_name in module.__dict__.keys():
             attr = module.__getattribute__(attr_name)
