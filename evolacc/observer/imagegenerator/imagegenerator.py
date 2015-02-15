@@ -30,6 +30,15 @@ class ImageGenerator(Observer):
 
 # CONSTRUCTOR #################################################################
 # PUBLIC METHODS ##############################################################
+    def initialize(self):
+        return NotImplemented
+
+    def update(self):
+        return NotImplemented
+
+    def finalize(self):
+        return NotImplemented
+
 # PRIVATE METHODS #############################################################
 # PREDICATS ###################################################################
 # ACCESSORS ###################################################################
