@@ -40,7 +40,8 @@ import os
 # PRE-DECLARATIONS      #
 #########################
 # directories and files
-DIRCNAME_USER_GENOMES = 'evolacc/usergenomes/'
+DIRCNAME_USER         = 'evolacc/userdata/'
+DIRCNAME_USER_GENOMES = DIRCNAME_USER    +'genomes/'
 FILENAME_CONFIG       = 'data/inputs/config.json'
 # configuration keys
 UNIVERSE_SIZE   = 'universe_size'
