@@ -248,7 +248,7 @@ def __import_user_genomes(genomes):
         print("WARNING: Genomes not found: "
               + ','.join((str(g) for g in remain_genomes))
              )
-    return classes, remain_genomes
+    return classes
 
 
 
