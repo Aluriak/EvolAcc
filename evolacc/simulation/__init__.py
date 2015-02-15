@@ -1,1 +1,1 @@
-from simulation import *
+from evolacc.simulation.simulation import *
