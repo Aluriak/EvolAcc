@@ -24,7 +24,6 @@ trigger saving or loading of (non-)existing configurations.
 # IMPORTS               #
 #########################
 from evolacc.staticgenome   import Genome
-from evolacc.unit.component import Component
 
 from collections import ChainMap
 from docopt      import docopt
