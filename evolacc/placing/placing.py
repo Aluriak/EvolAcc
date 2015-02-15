@@ -89,6 +89,31 @@ class Placer(dict):
         return coords in self
 
 # ACCESSORS ###################################################################
+    @staticmethod
+    def all_coordinates(maximal, dimensions_count=None):
+        """Return a generator of all possible coordinates in given conditions.
+
+        If dimensions_count is provided:
+            - maximal is an integer value that give the max coordinate in
+                a dimnension.
+            - dimensions_count is the number of dimensions
+        If dimensions_count is not provided:
+            maximal is a list of N values, where N is the number 
+                of dimensions, and each value describes the maximal
+                coordinate reachable for one dimension.
+        """
+        if dimensions_count is None: 
+            # if all dimensions have the same maximum bound
+            if all(m == maximal[0] for m in maximal):
+                return Placer.all_coordinates(maximal[0], len(maximal))
+            else:
+                return NotImplemented
+        else:
+            return (coords for coords in product(
+                range(0, maximal), repeat=dimensions_count
+            ))
+
+
 # CONVERSION ##################################################################
 # OPERATORS ###################################################################
 
