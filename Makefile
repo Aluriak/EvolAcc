@@ -1,8 +1,8 @@
 all:
-	python3 -m evolacc
-
-tall:
 	python -m evolacc --universe_size=6,6 --genomes=GolCell
+
+al:
+	python3 -m evolacc
 
 
 tt:
