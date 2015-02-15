@@ -83,6 +83,10 @@ class Placer(dict):
         """Return True iff given coords are valid in self"""
         return len(coords) == self.dimensions
 
+    def have(self, coords):
+        """Return True iff an object is placed at given coordinates
+        TODO: rename this method"""
+        return coords in self
 
 # ACCESSORS ###################################################################
 # CONVERSION ##################################################################
