@@ -46,7 +46,7 @@ class GolCell(StaticGenome):
     """
 
 # CONSTRUCTOR #################################################################
-    def __init__(self, I, S, B, state=True):
+    def __init__(self, I=2, S=3, B=4, state=True):
         self.I, self.S, self.B = I, S, B
         self.state = state
 
