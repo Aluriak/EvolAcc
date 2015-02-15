@@ -37,6 +37,11 @@ if __name__ == '__main__':
 
     # RUN EVOLACC
     ea = EvolAcc(configuration)
+    print('CONFIGURATION DONE !')
+    print('NOW START THE SIMULATION…')
+    for _ in range(10):
+        ea.run()
+        ea.debug_print()
 
 
 
