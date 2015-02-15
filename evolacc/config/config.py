@@ -28,6 +28,7 @@ from evolacc.staticgenome   import Genome
 from collections import ChainMap
 from docopt      import docopt
 import importlib
+import random
 import json
 import sys
 import os
@@ -42,10 +43,12 @@ import os
 # directories and files
 DIRCNAME_USER         = 'evolacc/userdata/'
 DIRCNAME_USER_GENOMES = DIRCNAME_USER    +'genomes/'
+DIRCNAME_USER_FACTORY = DIRCNAME_USER    +'factories/'
 FILENAME_CONFIG       = 'data/inputs/config.json'
 # configuration keys
 UNIVERSE_SIZE   = 'universe_size'
 GENOMES_CLASSES = 'genomes'
+FACTORY         = 'factory'
 CONFIG_FILE     = 'config_file'
 
 
@@ -128,9 +131,29 @@ def __parse_from_file(filename=FILENAME_CONFIG):
 def __default_configuration():
     """
     Return dict that describes the default configuration.
-    NOT IMPLEMENTED
     """
-    return {}
+    # create default classes
+    from evolacc.factory import UnitFactory
+    from evolacc.action  import Kill as KillAction
+    from evolacc.unit    import Genome
+    class CellGenome(Genome):
+        """Die, sometimes"""
+        def step(self, simulation, coords):
+            if random.randint(0, 50) == 0:
+                simulation.add(KillAction(coords))
+    # unit factory: create always a CellGenome
+    factory = UnitFactory()
+    factory.addUnit([CellGenome])
+
+
+
+    #from evolacc.userdata.genomes.conway import GolCell
+    return {
+        UNIVERSE_SIZE   : [10,10],
+        GENOMES_CLASSES : CellGenome,
+        FACTORY         : factory,
+        CONFIG_FILE     : 'config_file',
+    }
 
 
 
