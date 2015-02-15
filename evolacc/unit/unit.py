@@ -40,9 +40,9 @@ class Unit:
 
 
 # PUBLIC METHODS ##############################################################
-    def step(self, simulation):
+    def step(self, simulation, coords):
         """Call step method of all components"""
-        [c.step(simulation) for c in self.components]
+        [c.step(simulation, coords) for c in self.components]
 
     def add(self, component):
         """Add given component to self. Do nothing if already present"""
