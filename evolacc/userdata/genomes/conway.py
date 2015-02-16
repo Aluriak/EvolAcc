@@ -5,16 +5,13 @@
 """
 Definition of a StaticGenome realization.
 Implements a Conway Game of Life.
-
-Provide an Action realization, GolSwitchState,
-that allow cells to switch state when phase is applied.
 """
 
 
 #########################
 # IMPORTS               #
 #########################
-from evolacc.action       import Action
+from evolacc.action       import FunctionCall
 from evolacc.staticgenome import StaticGenome
 
 
@@ -22,17 +19,11 @@ from evolacc.staticgenome import StaticGenome
 #########################
 # PRE-DECLARATIONS      #
 #########################
-class GolSwitchState(Action):
-    def __init__(self, coords, new_state):
-        self.coords     = coords
-        self.new_state  = new_state
-    def execute(self, simulation):
-        simulation.placer[self.coords].state = self.new_state
 
 
 
 #########################
-# LIVE                  #
+# CELL                  #
 #########################
 class GolCell(StaticGenome):
     """
@@ -41,7 +32,7 @@ class GolCell(StaticGenome):
         I = isolement limit
         S = surpopulation limit
         B = born limit
-    the Conway Game of Life rules are 2/3/4
+    the Conway Game of Life rules are 2/4/3
     A Cell can have two states : True or False
     """
     ALIVE = True
@@ -55,13 +46,17 @@ class GolCell(StaticGenome):
 
 
 # PUBLIC METHODS ##############################################################
+    def switch_state(self):
+        self.state = not self.state
+
     def step(self, simulation, coords):
         neis = simulation.placer.moore_neighbors(coords)
-        # add switch state action to simulation
-        simulation.add(GolSwitchState(
-            coords, 
-            self._next_state([n.state for n in neis])
-        ))
+        # add switch state action to simulation if necessary
+        if self._next_state([n.state for n in neis]) != self.state:
+            simulation.add(FunctionCall(
+                GolCell.switch_state,
+                self
+            ))
 
 
 # PRIVATE METHODS #############################################################
