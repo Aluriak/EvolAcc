@@ -68,8 +68,21 @@ class Duplicate(Action):
 
 
 #########################
-# FUNCTIONS             #
+# FUNCTOR ACTION        #
 #########################
+class FunctionCall(Action):
+    """
+    Action that call given function with given arguments.
+    """
+    def __init__(self, function, *args, **kwargs):
+        assert(callable(function))
+        self.function = function
+        self.args = args
+        self.kwargs = kwargs
+
+    def execute(self, simulation):
+        """Execute function"""
+        self.function(*self.args, **self.kwargs)
 
 
 
