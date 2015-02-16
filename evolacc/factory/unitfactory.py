@@ -71,7 +71,9 @@ class UnitFactory:
 
     def create(self, simulation=None, coords=None):
         """Return a new Unit, choose randomly in knowed ones, and initialize
-        with their components."""
+        with their components.
+        Can return None if no Unit need to be create.
+        """
         assert(len(self.units_componants) > 0)
         return Unit(components=(
             constructor(simulation, coords) for constructor in random.choice(self.units_componants)
