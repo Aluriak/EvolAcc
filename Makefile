@@ -1,8 +1,8 @@
-all:
-	python -m evolacc --universe_size=6,6 --genomes=GolCell
+gol:
+	python -m evolacc --factory=GolFactory
 
-al:
-	python3 -m evolacc
+save_config:
+	python3 -m evolacc --save_config
 
 
 tt:
