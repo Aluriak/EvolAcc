@@ -203,7 +203,28 @@ def __normalized(configuration):
     This function is the complementary of __converted, 
     and return a serializable view of given configuration.
     """
-    return NotImplemented
+    configuration = dict(configuration)
+    # universe size must be treat as a list of integer
+    if UNIVERSE_SIZE in configuration:
+        configuration[UNIVERSE_SIZE] = ','.join((
+            str(_) for _ in configuration[UNIVERSE_SIZE]
+        ))
+
+    # convert user genomes
+    if GENOMES_CLASSES in configuration:
+        configuration[GENOMES_CLASSES] = ','.join((
+            cls.__name__ for cls in configuration[GENOMES_CLASSES]
+        ))
+
+    # convert user factory
+    if FACTORY in configuration:
+        configuration[FACTORY] = configuration[FACTORY].__class__.__name__
+
+    # save config flag never saved
+    if SAVE_CONFIG_FILE in configuration:
+        del configuration[SAVE_CONFIG_FILE]
+
+    return configuration
 
 
 
