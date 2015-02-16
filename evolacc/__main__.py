@@ -16,6 +16,9 @@ Usage:
 Options:
     --universe_size=COUNT[,COUNT]   size of universe in each dimension
     --genomes=NAME[,NAME]           names of Genome classes used
+    --factory=NAME                  name of used factory
+    --save_config                   save configuration in the config file
+    --config_file=FILE              config file
 """
 
 #########################
@@ -36,12 +39,14 @@ if __name__ == '__main__':
     configuration = config.generate_from(__doc__)
 
     # RUN EVOLACC
+    print('CONFIGURATION…')
     ea = EvolAcc(configuration)
-    print('CONFIGURATION DONE !')
-    print('NOW START THE SIMULATION…')
-    for _ in range(10):
+    print('DONE !')
+    print('START THE SIMULATION…')
+    for _ in range(200):
         ea.run()
         ea.debug_print()
+    print('DONE !')
 
 
 
