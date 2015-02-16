@@ -63,6 +63,9 @@ class Unit:
     
 # ACCESSORS ###################################################################
 # CONVERSION ##################################################################
+    def __str__(self):
+        """Join str versions of all components"""
+        return ','.join((str(c) for c in self.components))
 # OPERATORS ###################################################################
 
 
