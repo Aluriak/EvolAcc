@@ -25,8 +25,8 @@ trigger saving or loading of (non-)existing configurations.
 #########################
 from evolacc.staticgenome   import Genome
 
-from collections import ChainMap
 from docopt      import docopt
+from collections import ChainMap
 import importlib
 import random
 import json
@@ -42,7 +42,7 @@ import os
 #########################
 # package
 PKG_NAME = 'evolacc'
-# directories and files
+# directories and files names
 DIRCNAME_USER         = 'evolacc/userdata/'
 DIRCNAME_USER_GENOMES = DIRCNAME_USER    +'genomes/'
 DIRCNAME_USER_FACTORY = DIRCNAME_USER    +'factories/'
@@ -139,23 +139,21 @@ def __default_configuration():
     from evolacc.action  import Kill as KillAction
     from evolacc.action  import Duplicate as DpltAction
     from evolacc.unit    import Genome
-    class CellGenome(Genome):
+    class ExampleGenome(Genome):
         """Die, sometimes"""
         def step(self, simulation, coords):
             if random.randint(0, 10) == 0:
                 simulation.add(KillAction(coords))
-            elif random.randint(0, 11) == 0:
+            elif random.randint(0, 10) == 0:
                 simulation.add(DpltAction(coords, factory.create(coords)))
+        def __str__(self): return 'X'
     # unit factory: create always a CellGenome
     factory = UnitFactory()
-    factory.addUnit([CellGenome])
+    factory.addUnit([ExampleGenome])
 
-
-
-    #from evolacc.userdata.genomes.conway import GolCell
     return {
         UNIVERSE_SIZE   : [10,10],
-        GENOMES_CLASSES : CellGenome,
+        GENOMES_CLASSES : [ExampleGenome],
         FACTORY         : factory,
         CONFIG_FILE     : 'config_file',
     }
