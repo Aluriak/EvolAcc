@@ -1,0 +1,33 @@
+# HOW TO
+This file describes things that can be performed with EvolAcc 0.1.0.  
+So, this is something like a usecase tutorial, for final users and for developpers !
+
+
+## Add a new program option
+Many options already exists, like *--factory*, *--help* or *--interactive*.
+For add a new option, the developper need to:
+- add new option in *__main__.py* docstring, according to [docopt](http://docopt.org/ ) syntax;
+- add constant name in *config* module (like *UNIVERSE\_SIZE* for example) with associated key;
+  
+Some things may be necessary, according to what is the option goal:
+- if it need to be casted in a particular format, *__normalized* and *__converted* functions must be completed;
+- if a default value exist, then it add to be put in *__default_configuration* function;
+  
+This done, the remain work is to use it !  
+
+
+## Game of Life in universe of 100 by 100 for 100 phases
+The Conway's Game of Life is a very simple cellular automaton, 
+and reproduce its behavior is always fun.  
+In EvolAcc, it can be design like this:
+- a cell is a Unit with a Custom Genome that contain, mainly, a state (alive or dead);
+- an UnitFactory will be designed for create alive or dead cell according to a density;
+- the FunctionCall Action will be used for implementation of state switching; 
+
+All these things are already implemented in *evolacc/userdata/factories/gol.py* and *evolacc/userdata/genomes/gol.py* files.
+Developpers are encouraged to take a look to these classes before code their own ones.  
+So, launch a Game of Life for 100 phases and in a world of 100 by 100 can be performed by:
+
+        python -m evolacc --factory=GolFactory --universe_size=1000,1000 --step_at_start=100
+
+
