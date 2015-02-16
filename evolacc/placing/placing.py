@@ -22,6 +22,7 @@ Unit tests:
 # IMPORTS               #
 #########################
 from itertools import product
+from functools import lru_cache
 
 
 
@@ -69,15 +70,51 @@ class Placer(dict):
             for nei_rel_coords in product((-1, 0, 1), repeat=len(coords))
         ]
         # get object for those are defined
-        neis = [
+        return [
             self[nei_coords]
             for nei_coords in neis
             if coords != nei_coords and nei_coords in self
         ]
-        return neis
 
 
 # PRIVATE METHODS #############################################################
+    @staticmethod
+    @lru_cache(maxsize=None)
+    def moore_neighbors_offsets(dimensions_count):
+        """Return a tuple of moore neighbors offsets, according to given 
+        dimensions count.
+        
+        >>> from evolacc.placing import Placer
+        >>> g = Placer.moore_neighbors_offsets(2)
+        >>> len(g)
+        8
+        >>> coords = ((0,-1), (1,-1), (1,0), (1,1), (0,1), (-1,1), (-1,0), (-1,1))
+        >>> all(c in g for c in coords)
+        True
+
+        """
+        # get all exact coords of potential moore_neighbors
+        return tuple([
+            coords
+            for coords in product((-1, 0, 1), repeat=dimensions_count)
+            if coords != (0, 0)
+        ])
+
+    @staticmethod
+    def moore_neighbors_relative(coords):
+        """
+        Return a generator of coords that are the coordinates of
+        moore neighbor of given coords.
+        """
+        sum_coords = lambda x, y: tuple([a+b for a,b in zip(x, y)])
+        # get all exact coords of potential moore_neighbors
+        return (
+            sum_coords(nei_rel_coords, coords)
+            for nei_rel_coords 
+            in Placer.moore_neighbors_offsets(len(coords))
+        )
+
+
 # PREDICATS ###################################################################
     def validate(self, coords):
         """Return True iff given coords are valid in self"""
@@ -89,6 +126,39 @@ class Placer(dict):
         return coords in self
 
 # ACCESSORS ###################################################################
+    def random_free_moore_neighbor(self, coords):
+        """
+        return randomly choosed free moore neighbors 
+        of given coords.
+        A moore neighbor is free iff there is no object in.
+        Return None if no free moore neighbor found
+        """
+        assert(self.validate(coords))
+        # get object for those are defined
+        import random
+        neis = [
+            nei_coords
+            for nei_coords in Placer.moore_neighbors_relative(coords)
+            if coords != nei_coords and nei_coords not in self
+        ]
+        return random.choice(neis) if len(neis) > 0 else None
+
+    def free_moore_neighbor(self, coords):
+        """
+        return a list of coordinates of free moore neighbors 
+        of given coords.
+        A moore neighbor is free iff there is no object in.
+        Return None if no free moore neighbor found
+        """
+        assert(self.validate(coords))
+        # get object for those are defined
+        neis = [
+            nei_coords
+            for nei_coords in Placer.moore_neighbors_relative(coords)
+            if coords != nei_coords and nei_coords not in self
+        ]
+        return random.choice(neis) if len(neis) > 0 else None
+
     @staticmethod
     def all_coordinates(maximal, dimensions_count=None):
         """Return a generator of all possible coordinates in given conditions.
