@@ -6,26 +6,13 @@
 Here is defined a generalist Factory of Unit instances.
 User can use UnitFactory class directly or 
 subclass it for more complex behaviors.
-
-Unit tests:
-    >>> from evolacc.unit         import Unit
-    >>> from evolacc.staticgenome import StaticGenome
-    >>> from evolacc.factory      import UnitFactory
-    >>> cmpnt = [StaticGenome, StaticGenome]
-    >>> ufact = UnitFactory()
-    >>> ufact.addUnit(cmpnt)
-    >>> issubclass(ufact.create().__class__, Unit)
-    True
-    >>> len(ufact.create().components) == len(cmpnt)
-    True
-
 """
 
 
 #########################
 # IMPORTS               #
 #########################
-from evolacc.unit import Unit, Component
+from evolacc.unit import Unit, Genome
 import random
 
 
@@ -47,37 +34,23 @@ class UnitFactory:
     User, when launch simulation, can provide an instance of this class (or 
     any subclass) for get a total control of Simulation initialization.
 
-    When create() is called, a randomly choosen set of components is used for
-    create a new Unit. As create() is called with references to Simulation and
-    coords of Unit in it, Components receive these data through construction.
+    At initialization, create() will be called for each place in the 
+    Simulation.
     """
 
 
 # CONSTRUCTOR #################################################################
     def __init__(self):
-        self.units_componants = list()
+        pass
 
 
 # PUBLIC METHODS ##############################################################
-    def addUnit(self, components):
-        """Wait for a list of Component constructors, 
-        that wait for two arguments: a Simulation instance and coords in it.
-
-        Declare a constructor of Unit, added to internal list 
-        of Unit constructors.
-        """
-        assert(all(issubclass(c, Component) for c in components))
-        self.units_componants.append(components)
-
-    def create(self, simulation=None, coords=None):
+    def create(self, simulation, coords):
         """Return a new Unit, choose randomly in knowed ones, and initialize
         with their components.
         Can return None if no Unit need to be create.
         """
-        assert(len(self.units_componants) > 0)
-        return Unit(components=(
-            constructor(simulation, coords) for constructor in random.choice(self.units_componants)
-        )) 
+        raise NotImplementedError
 
 
 # PRIVATE METHODS #############################################################
@@ -90,8 +63,26 @@ class UnitFactory:
 
 
 #########################
-# FUNCTIONS             #
+# REALIZATION EXAMPLE   #
 #########################
+from evolacc.action  import Kill as KillAction
+from evolacc.action  import Duplicate as DpltAction
+class FactoryExample(UnitFactory):
+    """
+    Basic example of factory that 
+    always create the same unit. Yeepie.
+    """
+    class GenomeExample(Genome):
+        """Dies and duplicate, sometimes.
+        Its just a basic example. Provided for testing."""
+        def step(self, simulation, coords):
+            if random.randint(0, 10) == 0:
+                simulation.add(KillAction(coords))
+            elif random.randint(0, 10) == 0:
+                simulation.add(DpltAction(coords, FactoryExample.GenomeExample(None)))
+        def __str__(self): return 'X'
 
+    def create(self, simulation, coords):
+        return Unit([FactoryExample.GenomeExample(simulation, coords)])
 
 
