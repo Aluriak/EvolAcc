@@ -40,11 +40,11 @@ class Simulation(Observable):
         self.placer  = Placer()
         # call factory for each place in the world
         for coords in Placer.all_coordinates(configuration[UNIVERSE_SIZE]):
-            # its impossible to have to object at the same place
-            assert(None is self.placer.place(
-                # place a factory generated Unit at generated coords
-                configuration[FACTORY].create(self, coords), coords
-            ))
+            # get a factory generated Unit at generated coords, or None
+            new_unit = configuration[FACTORY].create(self, coords)
+            if new_unit is not None:
+                # its impossible to have to object at the same place
+                assert(self.placer.place(new_unit, coords) is None)
 
 
 # PUBLIC METHODS ##############################################################
