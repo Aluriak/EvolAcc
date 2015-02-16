@@ -53,6 +53,7 @@ UNIVERSE_SIZE   = 'universe_size'
 GENOMES_CLASSES = 'genomes'
 FACTORY         = 'factory'
 CONFIG_FILE     = 'config_file'
+STEPS_AT_START  = 'steps_at_start'
 # configuration keys flags
 SAVE_CONFIG_FILE= 'save_config'
 
@@ -210,6 +211,10 @@ def __normalized(configuration):
     if SAVE_CONFIG_FILE in configuration:
         del configuration[SAVE_CONFIG_FILE]
 
+    # steps number need to be ints
+    if STEPS_AT_START in configuration:
+        configuration[STEPS_AT_START] = str(configuration[STEPS_AT_START])
+
     return configuration
 
 
@@ -247,6 +252,10 @@ def __converted(configuration):
         configuration[FACTORY] = __import_user_factory(
             configuration[FACTORY]
         )
+
+    # steps number need are integers 
+    if STEPS_AT_START in configuration:
+        configuration[STEPS_AT_START] = int(configuration[STEPS_AT_START])
 
     return configuration
 

@@ -19,6 +19,7 @@ Options:
     --factory=NAME                  name of used factory
     --save_config                   save configuration in the config file
     --config_file=FILE              config file
+    --steps_at_start=COUNT          number of phase computed after initialization
 """
 
 #########################
