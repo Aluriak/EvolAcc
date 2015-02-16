@@ -161,27 +161,13 @@ def __default_configuration():
     """
     Return dict that describes the default configuration.
     """
-    # create default classes
-    from evolacc.factory import UnitFactory
-    from evolacc.action  import Kill as KillAction
-    from evolacc.action  import Duplicate as DpltAction
-    from evolacc.unit    import Genome
-    class ExampleGenome(Genome):
-        """Die, sometimes"""
-        def step(self, simulation, coords):
-            if random.randint(0, 10) == 0:
-                simulation.add(KillAction(coords))
-            elif random.randint(0, 10) == 0:
-                simulation.add(DpltAction(coords, factory.create(coords)))
-        def __str__(self): return 'X'
-    # unit factory: create always a CellGenome
-    factory = UnitFactory()
-    factory.addUnit([ExampleGenome])
+    # create a basic UnitFactory
+    from evolacc.factory import FactoryExample
 
     return {
         UNIVERSE_SIZE   : [10,10],
-        GENOMES_CLASSES : [ExampleGenome],
-        FACTORY         : factory,
+        GENOMES_CLASSES : [],
+        FACTORY         : FactoryExample(),
         CONFIG_FILE     : FILENAME_CONFIG,
         # FLAGS
         SAVE_CONFIG_FILE: False,
