@@ -1,6 +1,6 @@
 {
-    "config_file":"data/inputs/config.json",
-    "genomes":"ExampleGenome",
+    "genomes":"",
+    "factory":"FactoryExample",
     "universe_size":"10,10",
-    "factory":"UnitFactory"
+    "config_file":"data/inputs/config.json"
 }
