@@ -44,7 +44,7 @@ class EvolAcc:
         for i in range(nb_row):
             for j in range(nb_col):
                 if self.simulation.placer.have((i, j)):
-                    print('X', end='')
+                    print(str(self.simulation.placer[i, j]), end='')
                 else:
                     print(' ', end='')
             print('')
