@@ -10,7 +10,7 @@ Main user-interface object of EvolAcc.
 # IMPORTS               #
 #########################
 from evolacc.simulation import Simulation
-from evolacc.config     import UNIVERSE_SIZE
+from evolacc.config     import UNIVERSE_SIZE, STEPS_AT_START
 
 
 
@@ -54,6 +54,12 @@ class EvolAcc:
         """Go forward phase_count times in the simulation"""
         self.simulation.step(phase_count)
 
+    def start(self):
+        """Do requested simulation"""
+        self.debug_print()
+        for _ in range(self.configuration[STEPS_AT_START]):
+            self.run()
+            self.debug_print()
 
 # PRIVATE METHODS #############################################################
 # PREDICATS ###################################################################

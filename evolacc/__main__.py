@@ -44,10 +44,7 @@ if __name__ == '__main__':
     ea = EvolAcc(configuration)
     print('DONE !')
     print('START THE SIMULATION…')
-    ea.debug_print()
-    for _ in range(10):
-        ea.run()
-        ea.debug_print()
+    ea.start()
     print('DONE !')
 
 
