@@ -27,7 +27,7 @@ class GolSwitchState(Action):
         self.coords     = coords
         self.new_state  = new_state
     def execute(self, simulation):
-        simulation.placer[coords].state = self.new_state
+        simulation.placer[self.coords].state = self.new_state
 
 
 
@@ -44,20 +44,23 @@ class GolCell(StaticGenome):
     the Conway Game of Life rules are 2/3/4
     A Cell can have two states : True or False
     """
+    ALIVE = True
+    DEAD  = False
 
 # CONSTRUCTOR #################################################################
-    def __init__(self, I=2, S=3, B=4, state=True):
+    def __init__(self, I=1, S=4, B=3, state=ALIVE):
+        assert(state in (GolCell.ALIVE, GolCell.DEAD))
         self.I, self.S, self.B = I, S, B
         self.state = state
 
 
 # PUBLIC METHODS ##############################################################
-    def step(self, coords, simulation):
+    def step(self, simulation, coords):
         neis = simulation.placer.moore_neighbors(coords)
         # add switch state action to simulation
         simulation.add(GolSwitchState(
             coords, 
-            self._next_state((n.state for n in neis))
+            self._next_state([n.state for n in neis])
         ))
 
 
@@ -65,9 +68,12 @@ class GolCell(StaticGenome):
 # PREDICATS ###################################################################
 # ACCESSORS ###################################################################
 # CONVERSION ##################################################################
+    def __str__(self):
+        return 'X' if self.state == GolCell.ALIVE else ' ' 
+
 # OPERATORS ###################################################################
     def _next_state(self, neighbors_state):
-        """Wait for an iterable of neighbors states (True/False)
+        """Wait for an iterable of neighbors states (alive/dead)
         Return the new state of self.
         """
         nb_nei = neighbors_state.count(True)
