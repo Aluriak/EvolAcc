@@ -137,12 +137,15 @@ def __default_configuration():
     # create default classes
     from evolacc.factory import UnitFactory
     from evolacc.action  import Kill as KillAction
+    from evolacc.action  import Duplicate as DpltAction
     from evolacc.unit    import Genome
     class CellGenome(Genome):
         """Die, sometimes"""
         def step(self, simulation, coords):
-            if random.randint(0, 50) == 0:
+            if random.randint(0, 10) == 0:
                 simulation.add(KillAction(coords))
+            elif random.randint(0, 11) == 0:
+                simulation.add(DpltAction(coords, factory.create(coords)))
     # unit factory: create always a CellGenome
     factory = UnitFactory()
     factory.addUnit([CellGenome])
