@@ -52,6 +52,8 @@ UNIVERSE_SIZE   = 'universe_size'
 GENOMES_CLASSES = 'genomes'
 FACTORY         = 'factory'
 CONFIG_FILE     = 'config_file'
+# configuration keys flags
+SAVE_CONFIG_FILE= 'save_config'
 
 
 
@@ -74,11 +76,15 @@ def generate_from(docstring):
         config_args.get(CONFIG_FILE, FILENAME_CONFIG)
     )
 
-    # TODO: CREATE DEFAULT CONFIGURATION
+    # CREATE DEFAULT CONFIGURATION
     config_default = __default_configuration()
 
-    # CREATE AND RETURN FINAL CONFIGURATION
+    # CREATE AND READ FLAGS
     configuration = ChainMap({}, config_args, config_file, config_default)
+    if configuration[SAVE_CONFIG_FILE]:
+        __save_config_file(dict(configuration))
+
+    # RETURN FINAL CONFIGURATION
     return configuration
 
 
@@ -126,6 +132,26 @@ def __parse_from_file(filename=FILENAME_CONFIG):
 
 
 
+#########################
+# SAVE CONFIG FILE      #
+#########################
+def __save_config_file(configuration):
+    """Save given configuration in configuration file in JSON format.
+    Filename used is taken from configuration itself.
+    First call __normalized() operation of received configuration.
+    """
+    try:
+        with open(configuration[CONFIG_FILE], 'w') as f:
+            json.dump(__normalized(configuration), f, 
+                      separators=(',', ':'), indent=4)
+    except FileNotFoundError:
+        print('WARNING: file ' + configuration[CONFIG_FILE] 
+              + ' not found. No operation performed.')
+    except ValueError:
+        print('WARNING: file ' + configuration[CONFIG_FILE] 
+              + ' incorrectly formatted. No operation performed.')
+
+
 
 #########################
 # DEFAULT CONFIGURATION #
@@ -155,7 +181,9 @@ def __default_configuration():
         UNIVERSE_SIZE   : [10,10],
         GENOMES_CLASSES : [ExampleGenome],
         FACTORY         : factory,
-        CONFIG_FILE     : 'config_file',
+        CONFIG_FILE     : FILENAME_CONFIG,
+        # FLAGS
+        SAVE_CONFIG_FILE: False,
     }
 
 
