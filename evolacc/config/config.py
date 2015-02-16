@@ -23,7 +23,8 @@ trigger saving or loading of (non-)existing configurations.
 #########################
 # IMPORTS               #
 #########################
-from evolacc.staticgenome   import Genome
+from evolacc.staticgenome import Genome
+from evolacc.factory      import UnitFactory
 
 from docopt      import docopt
 from collections import ChainMap
@@ -233,6 +234,13 @@ def __converted(configuration):
         configuration[GENOMES_CLASSES] = __import_user_genomes(
             configuration[GENOMES_CLASSES].split(',')
         )
+
+    # import user factory
+    if FACTORY in configuration:
+        configuration[FACTORY] = __import_user_factory(
+            configuration[FACTORY]
+        )
+
     return configuration
 
 
@@ -280,6 +288,46 @@ def __import_user_genomes(genomes):
               + ','.join((str(g) for g in remain_genomes))
              )
     return classes
+
+
+
+#########################
+# IMPORT USER FACTORY   #
+#########################
+def __import_user_factory(factory_name):
+    """
+    Import factory from modules in user factories directory.
+    Given factory must be a string that contain name of
+    wanted UnitFactory realizations.
+    Return a class, garanteed UnitFactory realizations. 
+    If a class is not found or not a UnitFactory subclass, 
+    it raise a warning and use a new UnitFactory intance.
+    """
+    factory_class = UnitFactory
+    # open python modules in user genomes directory
+    # ex: 'evolacc/factories/thing.py' -> 'evolacc.factories.thing'
+    modules = (DIRCNAME_USER_FACTORY.replace('/', '.')+os.path.splitext(f)[0] 
+               for f in os.listdir(DIRCNAME_USER_FACTORY) 
+               if os.path.splitext(f)[1] == '.py' and f != '__init__.py'
+              )
+    # collect all expected classes in usergenomes list
+    for module in modules:
+        # import user module
+        module = importlib.import_module(module, package=PKG_NAME)
+        # collect expected classes
+        for attr_name in module.__dict__.keys():
+            attr = module.__getattribute__(attr_name)
+            if attr_name == factory_name:
+                if issubclass(attr, UnitFactory):
+                    factory_class = attr
+                    break # finished !
+                else:
+                    print('WARNING: ' + attr_name + ' is not a UnitFactory realization.') # TODO: replace by logging
+                    factory_class = UnitFactory
+        # don't need to continue if factory finded
+        if factory_class is not UnitFactory: break
+    # return instance of factory class
+    return factory_class()
 
 
 
