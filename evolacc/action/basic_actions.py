@@ -37,11 +37,32 @@ class Kill(Action):
         assert(simulation.placer.validate(self.coords)) #TODO: replace that by logging
         del simulation.placer[self.coords]
 
-# PRIVATE METHODS #############################################################
-# PREDICATS ###################################################################
-# ACCESSORS ###################################################################
-# CONVERSION ##################################################################
-# OPERATORS ###################################################################
+
+
+#########################
+# DUPLICATE ACTION      #
+#########################
+class Duplicate(Action):
+    """
+    Action that lead to unit duplication in a random free moore neighborood.
+    """
+# CONSTRUCTOR #################################################################
+    def __init__(self, coords, new_unit):
+        """
+        coords are coordinates of unit that need to be duplicate.
+        new_unit is the new unit that will be add.
+        """
+        self.coords = coords
+        self.new_unit = new_unit
+
+# PUBLIC METHODS ##############################################################
+    def execute(self, simulation):
+        """ Duplicate unit in given simulation """
+        assert(simulation.placer.validate(self.coords)) #TODO: replace that by logging
+        nei = simulation.placer.random_free_moore_neighbor(self.coords)
+        if nei is not None: 
+            assert(simulation.placer.place(self.new_unit, nei) is None)
+        #else: no free neighbor
 
 
 
