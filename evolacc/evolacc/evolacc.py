@@ -37,29 +37,14 @@ class EvolAcc:
 
 
 # PUBLIC METHODS ##############################################################
-    def debug_print(self):
-        nb_row = self.configuration[UNIVERSE_SIZE][0]
-        nb_col = self.configuration[UNIVERSE_SIZE][1]
-        print(nb_col*'-')
-        for i in range(nb_row):
-            for j in range(nb_col):
-                if self.simulation.placer.have((i, j)):
-                    print(str(self.simulation.placer[i, j]), end='')
-                else:
-                    print(' ', end='')
-            print('')
-        print(nb_col*'-' + '\n')
-
     def run(self, phase_count=1):
         """Go forward phase_count times in the simulation"""
         self.simulation.step(phase_count)
 
     def start(self):
         """Do requested simulation"""
-        self.debug_print()
         for _ in range(self.configuration[STEPS_AT_START]):
             self.run()
-            self.debug_print()
 
 # PRIVATE METHODS #############################################################
 # PREDICATS ###################################################################
