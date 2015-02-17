@@ -45,15 +45,15 @@ import os
 # package
 PKG_NAME = 'evolacc'
 # directories and files names
-DIRCNAME_USER         = 'evolacc/userdata/'
-DIRCNAME_USER_GENOMES = DIRCNAME_USER    +'genomes/'
-DIRCNAME_USER_FACTORY = DIRCNAME_USER    +'factories/'
-DIRCNAME_USER_WATCHERS= DIRCNAME_USER    +'watchers/'
-FILENAME_CONFIG       = 'data/inputs/config.json'
+DIRCNAME_USER           = 'evolacc/userdata/'
+DIRCNAME_USER_GENOMES   = DIRCNAME_USER    +'genomes/'
+DIRCNAME_USER_FACTORIES = DIRCNAME_USER    +'factories/'
+DIRCNAME_USER_WATCHERS  = DIRCNAME_USER    +'watchers/'
+FILENAME_CONFIG         = 'data/inputs/config.json'
 # configuration keys
 UNIVERSE_SIZE   = 'universe_size'
 GENOMES_CLASSES = 'genomes'
-FACTORY         = 'factory'
+FACTORY_CLASSES = 'factories'
 WATCHER_CLASSES = 'watchers'
 CONFIG_FILE     = 'config_file'
 STEPS_AT_START  = 'steps_at_start'
@@ -172,7 +172,7 @@ def __default_configuration():
         UNIVERSE_SIZE   : [10,10],
         GENOMES_CLASSES : [], # no genome
         WATCHER_CLASSES : [], # no watcher
-        FACTORY         : FactoryExample(),
+        FACTORY_CLASSES : [FactoryExample],
         CONFIG_FILE     : FILENAME_CONFIG,
         # FLAGS
         SAVE_CONFIG_FILE: False,
@@ -207,9 +207,11 @@ def __normalized(configuration):
             cls.__name__ for cls in configuration[GENOMES_CLASSES]
         ))
 
-    # convert user factory
-    if FACTORY in configuration:
-        configuration[FACTORY] = configuration[FACTORY].__class__.__name__
+    # convert user factories
+    if FACTORY_CLASSES in configuration:
+        configuration[FACTORY_CLASSES] = ','.join((
+            cls.__name__ for cls in configuration[FACTORY_CLASSES]
+        ))
 
     # convert user watchers
     if WATCHER_CLASSES in configuration:
@@ -267,10 +269,12 @@ def __converted(configuration):
             lambda w: issubclass(w, Observer)
         )
 
-    # import user factory
-    if FACTORY in configuration:
-        configuration[FACTORY] = __import_user_factory(
-            configuration[FACTORY],
+    # import users factories
+    if FACTORY_CLASSES in configuration:
+        configuration[FACTORY_CLASSES] = __import_user_classes(
+            DIRCNAME_USER_FACTORIES,
+            configuration[FACTORY_CLASSES].split(','),
+            lambda w: issubclass(w, UnitFactory)
         )
 
     # steps number need are integers 
