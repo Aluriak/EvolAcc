@@ -23,11 +23,12 @@ In EvolAcc, it can be design like this:
 - a cell is a Unit with a Custom Genome that contain, mainly, a state (alive or dead);
 - an UnitFactory will be designed for create alive or dead cell according to a density;
 - the FunctionCall Action will be used for implementation of state switching; 
+- a watcher that print alive and dead cells;
 
-All these things are already implemented in *evolacc/userdata/factories/gol.py* and *evolacc/userdata/genomes/gol.py* files.
+All these things are already implemented in *evolacc/userdata/factories/gol.py*, *evolacc/userdata/watchers/gol.py* and *evolacc/userdata/genomes/gol.py* files.
 Developpers are encouraged to take a look to these classes before code their own ones.  
 So, launch a Game of Life for 100 phases and in a world of 100 by 100 can be performed by:
 
-        python -m evolacc --factory=GolFactory --universe_size=1000,1000 --step_at_start=100
+        python -m evolacc --factory=GolFactory --universe_size=1000,1000 --step_at_start=100 --watchers=GolWatcher
 
 
