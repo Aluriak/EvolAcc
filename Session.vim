@@ -14,13 +14,13 @@ badd +1 evolacc/action/action.py
 badd +1 evolacc/unit/unit.py
 badd +1 evolacc/unit/component/component.py
 badd +1 evolacc/observer/observable.py
-badd +1 evolacc/observer/observer.py
+badd +38 evolacc/observer/observer.py
 badd +1 evolacc/placing/placing.py
 badd +1 evolacc/action/basic_actions.py
 badd +1 evolacc/unit/component/genome.py
 badd +1 evolacc/staticgenome/staticgenome.py
 badd +1 evolacc/observer/videocreator/videocreator.py
-badd +1 evolacc/observer/imagegenerator/imagegenerator.py
+badd +2 evolacc/observer/imagegenerator/imagegenerator.py
 badd +7 evolacc/unit/unitfactory.py
 badd +22 evolacc/unittests.py
 badd +20 unittests.py
@@ -28,7 +28,8 @@ badd +1 evolacc/factory/unitfactory.py
 badd +151 evolacc/configparser/configparser.py
 badd +1 evolacc/config/configparser.py
 badd +1 evolacc/config/config.py
-badd +0 evolacc/evolacc/evolacc.py
+badd +1 evolacc/evolacc/evolacc.py
+badd +0 evolacc/userdata/watchers/gol.py
 argglobal
 silent! argdel *
 argadd ~/Programmation/Projets/EvolAcc/EvolAcc/evolacc/__main__.py
@@ -43,8 +44,8 @@ set nosplitbelow
 set nosplitright
 wincmd t
 set winheight=1 winwidth=1
-exe 'vert 1resize ' . ((&columns * 119 + 119) / 239)
-exe 'vert 2resize ' . ((&columns * 119 + 119) / 239)
+exe 'vert 1resize ' . ((&columns * 84 + 85) / 170)
+exe 'vert 2resize ' . ((&columns * 85 + 85) / 170)
 argglobal
 setlocal fdm=manual
 setlocal fde=0
@@ -55,11 +56,11 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 7 - ((6 * winheight(0) + 28) / 56)
+let s:l = 13 - ((12 * winheight(0) + 19) / 39)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-7
+13
 normal! 0
 lcd ~/Programmation/Projets/EvolAcc/EvolAcc
 wincmd w
@@ -74,16 +75,16 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 23 - ((16 * winheight(0) + 28) / 56)
+let s:l = 52 - ((38 * winheight(0) + 19) / 39)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-23
+52
 normal! 0
 lcd ~/Programmation/Projets/EvolAcc/EvolAcc
 wincmd w
-exe 'vert 1resize ' . ((&columns * 119 + 119) / 239)
-exe 'vert 2resize ' . ((&columns * 119 + 119) / 239)
+exe 'vert 1resize ' . ((&columns * 84 + 85) / 170)
+exe 'vert 2resize ' . ((&columns * 85 + 85) / 170)
 tabedit ~/Programmation/Projets/EvolAcc/EvolAcc/evolacc/config/config.py
 set splitbelow splitright
 wincmd _ | wincmd |
@@ -94,8 +95,8 @@ set nosplitbelow
 set nosplitright
 wincmd t
 set winheight=1 winwidth=1
-exe 'vert 1resize ' . ((&columns * 119 + 119) / 239)
-exe 'vert 2resize ' . ((&columns * 119 + 119) / 239)
+exe 'vert 1resize ' . ((&columns * 84 + 85) / 170)
+exe 'vert 2resize ' . ((&columns * 85 + 85) / 170)
 argglobal
 setlocal fdm=manual
 setlocal fde=0
@@ -106,12 +107,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 69 - ((18 * winheight(0) + 28) / 56)
+let s:l = 274 - ((28 * winheight(0) + 19) / 39)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-69
-normal! 04|
+274
+normal! 09|
 lcd ~/Programmation/Projets/EvolAcc/EvolAcc
 wincmd w
 argglobal
@@ -125,7 +126,7 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 28) / 56)
+let s:l = 1 - ((0 * winheight(0) + 19) / 39)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -133,8 +134,8 @@ normal! zt
 normal! 0
 lcd ~/Programmation/Projets/EvolAcc/EvolAcc
 wincmd w
-exe 'vert 1resize ' . ((&columns * 119 + 119) / 239)
-exe 'vert 2resize ' . ((&columns * 119 + 119) / 239)
+exe 'vert 1resize ' . ((&columns * 84 + 85) / 170)
+exe 'vert 2resize ' . ((&columns * 85 + 85) / 170)
 tabedit ~/Programmation/Projets/EvolAcc/EvolAcc/evolacc/simulation/simulation.py
 set splitbelow splitright
 set nosplitbelow
@@ -151,12 +152,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 28) / 56)
+let s:l = 62 - ((18 * winheight(0) + 19) / 39)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-1
-normal! 023|
+62
+normal! 070|
 lcd ~/Programmation/Projets/EvolAcc/EvolAcc
 tabedit ~/Programmation/Projets/EvolAcc/EvolAcc/evolacc/placing/placing.py
 set splitbelow splitright
@@ -174,7 +175,7 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 28) / 56)
+let s:l = 1 - ((0 * winheight(0) + 19) / 39)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -191,8 +192,8 @@ set nosplitbelow
 set nosplitright
 wincmd t
 set winheight=1 winwidth=1
-exe 'vert 1resize ' . ((&columns * 119 + 119) / 239)
-exe 'vert 2resize ' . ((&columns * 119 + 119) / 239)
+exe 'vert 1resize ' . ((&columns * 84 + 85) / 170)
+exe 'vert 2resize ' . ((&columns * 85 + 85) / 170)
 argglobal
 setlocal fdm=manual
 setlocal fde=0
@@ -203,7 +204,7 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 10 - ((9 * winheight(0) + 28) / 56)
+let s:l = 10 - ((6 * winheight(0) + 19) / 39)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -222,7 +223,7 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 28 - ((27 * winheight(0) + 28) / 56)
+let s:l = 28 - ((19 * winheight(0) + 19) / 39)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -230,8 +231,8 @@ normal! zt
 normal! 019|
 lcd ~/Programmation/Projets/EvolAcc/EvolAcc
 wincmd w
-exe 'vert 1resize ' . ((&columns * 119 + 119) / 239)
-exe 'vert 2resize ' . ((&columns * 119 + 119) / 239)
+exe 'vert 1resize ' . ((&columns * 84 + 85) / 170)
+exe 'vert 2resize ' . ((&columns * 85 + 85) / 170)
 tabedit ~/Programmation/Projets/EvolAcc/EvolAcc/evolacc/unit/unit.py
 set splitbelow splitright
 set nosplitbelow
@@ -248,7 +249,7 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 36 - ((35 * winheight(0) + 28) / 56)
+let s:l = 36 - ((24 * winheight(0) + 19) / 39)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -271,7 +272,7 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 28) / 56)
+let s:l = 1 - ((0 * winheight(0) + 19) / 39)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -288,8 +289,8 @@ set nosplitbelow
 set nosplitright
 wincmd t
 set winheight=1 winwidth=1
-exe 'vert 1resize ' . ((&columns * 119 + 119) / 239)
-exe 'vert 2resize ' . ((&columns * 119 + 119) / 239)
+exe 'vert 1resize ' . ((&columns * 84 + 85) / 170)
+exe 'vert 2resize ' . ((&columns * 85 + 85) / 170)
 argglobal
 setlocal fdm=manual
 setlocal fde=0
@@ -300,12 +301,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 32 - ((31 * winheight(0) + 28) / 56)
+let s:l = 32 - ((22 * winheight(0) + 19) / 39)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
 32
-normal! 078|
+normal! 012|
 lcd ~/Programmation/Projets/EvolAcc/EvolAcc
 wincmd w
 argglobal
@@ -319,7 +320,7 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 10 - ((9 * winheight(0) + 28) / 56)
+let s:l = 10 - ((6 * winheight(0) + 19) / 39)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -327,8 +328,8 @@ normal! zt
 normal! 027|
 lcd ~/Programmation/Projets/EvolAcc/EvolAcc
 wincmd w
-exe 'vert 1resize ' . ((&columns * 119 + 119) / 239)
-exe 'vert 2resize ' . ((&columns * 119 + 119) / 239)
+exe 'vert 1resize ' . ((&columns * 84 + 85) / 170)
+exe 'vert 2resize ' . ((&columns * 85 + 85) / 170)
 tabedit ~/Programmation/Projets/EvolAcc/EvolAcc/evolacc/staticgenome/staticgenome.py
 set splitbelow splitright
 set nosplitbelow
@@ -345,12 +346,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 32 - ((31 * winheight(0) + 28) / 56)
+let s:l = 1 - ((0 * winheight(0) + 19) / 39)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-32
-normal! 05|
+1
+normal! 03|
 lcd ~/Programmation/Projets/EvolAcc/EvolAcc
 tabedit ~/Programmation/Projets/EvolAcc/EvolAcc/evolacc/observer/observer.py
 set splitbelow splitright
@@ -362,8 +363,8 @@ set nosplitbelow
 set nosplitright
 wincmd t
 set winheight=1 winwidth=1
-exe 'vert 1resize ' . ((&columns * 119 + 119) / 239)
-exe 'vert 2resize ' . ((&columns * 119 + 119) / 239)
+exe 'vert 1resize ' . ((&columns * 84 + 85) / 170)
+exe 'vert 2resize ' . ((&columns * 85 + 85) / 170)
 argglobal
 setlocal fdm=manual
 setlocal fde=0
@@ -374,12 +375,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 20 - ((19 * winheight(0) + 28) / 56)
+let s:l = 39 - ((32 * winheight(0) + 19) / 39)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-20
-normal! 015|
+39
+normal! 0
 lcd ~/Programmation/Projets/EvolAcc/EvolAcc
 wincmd w
 argglobal
@@ -393,40 +394,18 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 24 - ((23 * winheight(0) + 28) / 56)
+let s:l = 36 - ((28 * winheight(0) + 19) / 39)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-24
-normal! 07|
+36
+normal! 039|
 lcd ~/Programmation/Projets/EvolAcc/EvolAcc
 wincmd w
-exe 'vert 1resize ' . ((&columns * 119 + 119) / 239)
-exe 'vert 2resize ' . ((&columns * 119 + 119) / 239)
-tabedit ~/Programmation/Projets/EvolAcc/EvolAcc/evolacc/observer/imagegenerator/imagegenerator.py
-set splitbelow splitright
-set nosplitbelow
-set nosplitright
-wincmd t
-set winheight=1 winwidth=1
-argglobal
-setlocal fdm=manual
-setlocal fde=0
-setlocal fmr={{{,}}}
-setlocal fdi=#
-setlocal fdl=0
-setlocal fml=1
-setlocal fdn=20
-setlocal fen
-silent! normal! zE
-let s:l = 27 - ((26 * winheight(0) + 28) / 56)
-if s:l < 1 | let s:l = 1 | endif
-exe s:l
-normal! zt
-27
-normal! 020|
-lcd ~/Programmation/Projets/EvolAcc/EvolAcc
-tabnext 1
+2wincmd w
+exe 'vert 1resize ' . ((&columns * 84 + 85) / 170)
+exe 'vert 2resize ' . ((&columns * 85 + 85) / 170)
+tabnext 10
 set stal=1
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf
