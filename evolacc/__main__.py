@@ -14,6 +14,8 @@ Usage:
     __main__.py [options] 
 
 Options:
+    -h --help                       print this help
+    -v --version                    print version name
     --universe_size=COUNT[,COUNT]   size of universe in each dimension
     --genomes=NAME[,NAME]           names of Genome classes used
     --watchers=NAME[,NAME]          names of Watcher classes to add to simulation

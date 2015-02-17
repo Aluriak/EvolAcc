@@ -26,6 +26,7 @@ trigger saving or loading of (non-)existing configurations.
 from evolacc.staticgenome import Genome
 from evolacc.factory      import UnitFactory
 from evolacc.observer     import Observer
+from evolacc              import VERSION_LONG
 
 from docopt      import docopt
 from collections import ChainMap
@@ -105,7 +106,7 @@ def __parse_from_doc(docstring):
     """
     # CREATE COMMAND LINE ARGUMENTS CONFIGURATION
     # Parse args with docopt and keep those are interestings
-    args = docopt(docstring)
+    args = docopt(docstring, version=VERSION_LONG)
     config_args = {k.lstrip('-'):v         # don't keep the firsts '-'
                    for k,v in args.items() 
                    if v is not None and k.startswith('-')}
