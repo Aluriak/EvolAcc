@@ -10,7 +10,7 @@ Main user-interface object of EvolAcc.
 # IMPORTS               #
 #########################
 from evolacc.simulation import Simulation
-from evolacc.config     import UNIVERSE_SIZE, STEPS_AT_START
+from evolacc.config     import UNIVERSE_SIZE, STEPS_AT_START, WATCHER_CLASSES
 
 
 
@@ -34,7 +34,10 @@ class EvolAcc:
         print('configuration:', dict(configuration))
         self.simulation = Simulation(configuration)
 
-
+        # add observers instances to simulation
+        self.simulation.attach_observers(
+            (o(self.simulation) for o in configuration[WATCHER_CLASSES])
+        )
 
 # PUBLIC METHODS ##############################################################
     def run(self, phase_count=1):
