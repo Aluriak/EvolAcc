@@ -253,14 +253,24 @@ def __converted(configuration):
 
     # import users genomes
     if GENOMES_CLASSES in configuration:
-        configuration[GENOMES_CLASSES] = __import_user_genomes(
-            configuration[GENOMES_CLASSES].split(',')
+        configuration[GENOMES_CLASSES] = __import_user_classes(
+            DIRCNAME_USER_GENOMES,
+            configuration[GENOMES_CLASSES].split(','),
+            lambda g: issubclass(g, Genome)
+        )
+
+    # import users watchers
+    if WATCHER_CLASSES in configuration:
+        configuration[WATCHER_CLASSES] = __import_user_classes(
+            DIRCNAME_USER_WATCHERS,
+            configuration[WATCHER_CLASSES].split(','),
+            lambda w: issubclass(w, Observer)
         )
 
     # import user factory
     if FACTORY in configuration:
         configuration[FACTORY] = __import_user_factory(
-            configuration[FACTORY]
+            configuration[FACTORY],
         )
 
     # steps number need are integers 
@@ -275,43 +285,43 @@ def __converted(configuration):
 #########################
 # IMPORT USER GENOMES   #
 #########################
-def __import_user_genomes(genomes):
+def __import_user_classes(dirname, classes_names, class_check=lambda x: True):
     """
-    Import all genomes from modules in user genomes directory.
-    Given genomes must be a list of string that contain name of
-    wanted Genome realizations.
-    Return a list of class, garanteed Genome realizations. 
+    Import all modules in directory of given name.
+    Given classes_names must be a list of string that contain name of
+    wanted classes.
+    Given class_check is applied on all returned class.
+    Return a list of class. 
     If a class is found multiple times, it will be added multiple times. 
-    If a class is not found, no error will be reported.
-    If a class is not a Genome subclass, an error will be reported.
+    If a class is not found, a warning will be reported.
+    If application of class_check on a class don't return True, a warning will
+    be reported.
     """
-    remain_genomes = set(genomes)
+    remain_classes = set(classes_names)
     classes = []
-    # open python modules in user genomes directory
-    # ex: 'evolacc/usergenomes/thing.py' -> 'evolacc.usergenomes.thing'
-    modules = (DIRCNAME_USER_GENOMES.replace('/', '.')+os.path.splitext(f)[0] 
-               for f in os.listdir(DIRCNAME_USER_GENOMES) 
+    # open python modules in user classes directory
+    # ex: 'evolacc/userclasses/thing.py' -> 'evolacc.userclasses.thing'
+    modules = (dirname.replace('/', '.')+os.path.splitext(f)[0] 
+               for f in os.listdir(dirname) 
                if os.path.splitext(f)[1] == '.py' and f != '__init__.py'
               )
-    # collect all expected classes in usergenomes list
+    # collect all expected classes in userclasses list
     for module in modules:
         # import user module
         module = importlib.import_module(module, package=PKG_NAME)
         # collect expected classes
         for attr_name in module.__dict__.keys():
             attr = module.__getattribute__(attr_name)
-            if attr_name in genomes:
-                remain_genomes.remove(attr_name)
-                if issubclass(attr, Genome):
+            if attr_name in classes_names:
+                remain_classes.remove(attr_name)
+                if class_check(attr):
                     classes.append(attr)
                 else:
-                    print('WARNING: ' + attr_name + ' is not a Genome realization.') # TODO: replace by logging
-    # verify and attach collected genomes to args configuration
-    assert(all(issubclass(usergenome, Genome) for usergenome in classes)) # TODO: replace by logging
-    if len(remain_genomes) > 0:
+                    print("WARNING: " + attr_name + " don't verify class_check() predicat.") # TODO: replace by logging
+    if len(remain_classes) > 0:
         # TODO: replace by logging
-        print("WARNING: Genomes not found: "
-              + ','.join((str(g) for g in remain_genomes))
+        print("WARNING: classes not found: "
+              + ','.join((str(g) for g in remain_classes))
              )
     return classes
 
