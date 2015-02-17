@@ -32,7 +32,8 @@ class Observable:
 # PUBLIC METHODS ##############################################################
     def attach_observers(self, observers):
         """add all observer of iterable observers to self"""
-        self.observers.extend(observers)
+        for observer in observers:
+            self.observers.add(observer)
 
     def notify_observers(self):
         """update all knowed observers"""
