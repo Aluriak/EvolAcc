@@ -25,7 +25,7 @@ class StaticGenome(Genome):
     """
     Realization of Genome.
     Basically, a StaticGenome is a python code with quantity of 
-    arguments.
+    arguments and attributes.
     """
 
 # CONSTRUCTOR #################################################################
