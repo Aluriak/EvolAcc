@@ -32,13 +32,13 @@ class Observer:
 
 # PUBLIC METHODS ##############################################################
     def initialize(self):
-        return NotImplemented
+        raise NotImplementedError
 
     def update(self):
-        return NotImplemented
+        raise NotImplementedError
 
     def finalize(self):
-        return NotImplemented
+        raise NotImplementedError
 
 # PRIVATE METHODS #############################################################
 # PREDICATS ###################################################################
