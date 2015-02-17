@@ -25,6 +25,7 @@ trigger saving or loading of (non-)existing configurations.
 #########################
 from evolacc.staticgenome import Genome
 from evolacc.factory      import UnitFactory
+from evolacc.observer     import Observer
 
 from docopt      import docopt
 from collections import ChainMap
@@ -47,11 +48,13 @@ PKG_NAME = 'evolacc'
 DIRCNAME_USER         = 'evolacc/userdata/'
 DIRCNAME_USER_GENOMES = DIRCNAME_USER    +'genomes/'
 DIRCNAME_USER_FACTORY = DIRCNAME_USER    +'factories/'
+DIRCNAME_USER_WATCHERS= DIRCNAME_USER    +'watchers/'
 FILENAME_CONFIG       = 'data/inputs/config.json'
 # configuration keys
 UNIVERSE_SIZE   = 'universe_size'
 GENOMES_CLASSES = 'genomes'
 FACTORY         = 'factory'
+WATCHER_CLASSES = 'watchers'
 CONFIG_FILE     = 'config_file'
 STEPS_AT_START  = 'steps_at_start'
 # configuration keys flags
@@ -167,7 +170,8 @@ def __default_configuration():
 
     return {
         UNIVERSE_SIZE   : [10,10],
-        GENOMES_CLASSES : [],
+        GENOMES_CLASSES : [], # no genome
+        WATCHER_CLASSES : [], # no watcher
         FACTORY         : FactoryExample(),
         CONFIG_FILE     : FILENAME_CONFIG,
         # FLAGS
@@ -206,6 +210,12 @@ def __normalized(configuration):
     # convert user factory
     if FACTORY in configuration:
         configuration[FACTORY] = configuration[FACTORY].__class__.__name__
+
+    # convert user watchers
+    if WATCHER_CLASSES in configuration:
+        configuration[WATCHER_CLASSES] = ','.join((
+            cls.__name__ for cls in configuration[WATCHER_CLASSES]
+        ))
 
     # save config flag never saved
     if SAVE_CONFIG_FILE in configuration:

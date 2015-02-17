@@ -16,6 +16,7 @@ Usage:
 Options:
     --universe_size=COUNT[,COUNT]   size of universe in each dimension
     --genomes=NAME[,NAME]           names of Genome classes used
+    --watchers=NAME[,NAME]          names of Watcher classes to add to simulation
     --factory=NAME                  name of used factory
     --save_config                   save configuration in the config file
     --config_file=FILE              config file
