@@ -35,6 +35,7 @@ class Simulation(Observable):
 
 # CONSTRUCTOR #################################################################
     def __init__(self, configuration):
+        super().__init__()
         self.configuration = configuration
         self.actions = []
         self.placer  = Placer()
@@ -55,10 +56,12 @@ class Simulation(Observable):
         if configuration is not None:
             self.configuration = configuration
         configuration = self.configuration # use is as shortcut
-        # generate steps and invoke actions
+        # generate steps
         for coords, unit in self.placer.items():
             unit.step(self, coords)
+        # invoke actions and notify_observers that a phase is finished
         self._invoke_actions()
+        self.notify_observers()
 
     def add(self, action):
         """Add given action to actions stack"""
