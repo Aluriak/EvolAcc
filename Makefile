@@ -25,7 +25,6 @@ verif:
 	pylint evolacc/__main__.py
 
 uml: 
-	pyreverse evolacc/__main__.py -o doc/uml.png
-
-
-
+	pyreverse  -AS -o png evolacc -p EvolAcc
+	mkdir -p doc/diagrams
+	mv packages_* classes_* doc/diagrams/
