@@ -26,10 +26,9 @@ Options:
 #########################
 # IMPORTS               #
 #########################
-from evolacc.config import UNIVERSE_SIZE
+from evolacc.evolacc  import EvolAcc
+from evolacc.config   import UNIVERSE_SIZE
 import evolacc.config as config
-
-from evolacc.evolacc import EvolAcc
 
 
 
