@@ -8,6 +8,7 @@
 # IMPORTS               #
 #########################
 from evolacc.action.action import Action
+from evolacc.config        import LOGGER
 
 
 
@@ -34,8 +35,13 @@ class Kill(Action):
 # PUBLIC METHODS ##############################################################
     def execute(self, simulation):
         """ Delete unit in given simulation """
-        assert(simulation.placer.validate(self.coords)) #TODO: replace that by logging
-        del simulation.placer[self.coords]
+        if simulation.placer.validate(self.coords):
+            del simulation.placer[self.coords]
+        else:
+            LOGGER.error("Coordinates invalids "
+                         + str(self.coords)
+                         + ". Kill Action is cancelled."
+                        )
 
 
 

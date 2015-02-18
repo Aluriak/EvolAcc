@@ -11,6 +11,7 @@ Main user-interface object of EvolAcc.
 #########################
 from evolacc.simulation import Simulation
 from evolacc.config     import UNIVERSE_SIZE, STEPS_AT_START, WATCHER_CLASSES
+from evolacc.config     import LOGGER
 
 
 
@@ -31,7 +32,7 @@ class EvolAcc:
 
 # CONSTRUCTOR #################################################################
     def __init__(self, configuration):
-        print('configuration:', dict(configuration))
+        LOGGER.info('configuration:' + str(dict(configuration)))
         self.simulation = Simulation(configuration)
 
         # add observers instances to simulation
