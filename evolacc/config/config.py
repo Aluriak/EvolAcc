@@ -202,23 +202,16 @@ def __normalized(configuration):
             str(_) for _ in configuration[UNIVERSE_SIZE]
         ))
 
-    # convert user genomes
-    if GENOMES_CLASSES in configuration:
-        configuration[GENOMES_CLASSES] = ','.join((
-            cls.__name__ for cls in configuration[GENOMES_CLASSES]
-        ))
-
-    # convert user factories
-    if FACTORY_CLASSES in configuration:
-        configuration[FACTORY_CLASSES] = ','.join((
-            cls.__name__ for cls in configuration[FACTORY_CLASSES]
-        ))
-
-    # convert user watchers
-    if WATCHER_CLASSES in configuration:
-        configuration[WATCHER_CLASSES] = ','.join((
-            cls.__name__ for cls in configuration[WATCHER_CLASSES]
-        ))
+    # convert user genomes, factories and watchers
+    for key in (GENOMES_CLASSES, FACTORY_CLASSES, WATCHER_CLASSES):
+        if key in configuration:
+            # delete it if no object
+            if len(configuration[key]) is 0:
+                del configuration[key]
+            else:
+                configuration[key] = ','.join((
+                    cls.__name__ for cls in configuration[key]
+                ))
 
     # save config flag never saved
     if SAVE_CONFIG_FILE in configuration:
