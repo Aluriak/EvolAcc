@@ -175,6 +175,7 @@ def __default_configuration():
         WATCHER_CLASSES : [], # no watcher
         FACTORY_CLASSES : [FactoryExample],
         CONFIG_FILE     : FILENAME_CONFIG,
+        STEPS_AT_START  : 1,
         # FLAGS
         SAVE_CONFIG_FILE: False,
     }
