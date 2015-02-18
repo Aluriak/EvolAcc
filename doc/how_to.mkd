@@ -16,6 +16,24 @@ Some things may be necessary, according to what is the option goal:
 This done, the remain work is to use it !  
 
 
+## Create a new simulation 
+Just launch EvolAcc create and run a new Simulation, but the goal of this part is to show what things need to be done for provide new Simulation patterns.  
+Firstly, the principle and goals of Simulation must be determined. *Two species coevolves and each represents the K/r strategy ; 
+which will be the most adaptated to a (un)stable world ?*, *A eat B, B eat C and C eat A ; is it possible to find rules that describes evolution of this world ?*, 
+or others *in a world with poles and equator, is a speciation possible ?*.
+  
+Many classes can be usefuls, all need to be defined in *evolacc/userdata/* repertory:
+- one or many Genomes, that describes behavior and caracteristics of life Units;
+- one or many Factories, for generates the world according to the needs;
+- one or many Actions, that permit to Genomes to act on world;
+- one or many Watchers, that allow user to study results;
+All these classes can be put in only one, or heavily use already defined objects (notabily Actions and Watchers).
+
+Once all theses objects are defined, EvolAcc can be launched:
+
+        python -m evolacc --universe_size=100,100 --factories=MyFactory1,MyFactory2 --step_at_start=1000 --watchers=MyWatcher1,MyWatcher2,MyWatcher2
+
+
 ## Game of Life in universe of 100 by 100 for 100 phases
 The Conway's Game of Life is a very simple cellular automaton, 
 and reproduce its behavior is always fun.  
