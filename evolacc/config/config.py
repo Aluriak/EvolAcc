@@ -302,7 +302,11 @@ def __import_user_classes(dirname, classes_names, class_check=lambda x: True):
     If application of class_check on a class don't return True, a warning will
     be reported.
     """
-    remain_classes = set(classes_names)
+    # delete void names, and ignore case when no classes are asked
+    classes_names = [c for c in classes_names if c != '']
+    if len(classes_names) == 0: return []
+    # initializations
+    remain_classes = set(c for c in classes_names if c != '')
     classes = []
     # open python modules in user classes directory
     # ex: 'evolacc/userclasses/thing.py' -> 'evolacc.userclasses.thing'
