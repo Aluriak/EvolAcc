@@ -28,8 +28,9 @@ Options:
 #########################
 # IMPORTS               #
 #########################
+from evolacc.config   import init_logging
 from evolacc.evolacc  import EvolAcc
-from evolacc.config   import UNIVERSE_SIZE
+from evolacc.config   import UNIVERSE_SIZE, LOGGER
 import evolacc.config as config
 
 
@@ -38,16 +39,20 @@ import evolacc.config as config
 # MAIN                  #
 #########################
 if __name__ == '__main__':
+    # START LOGGING
+    init_logging()
+
     # PARSE ARGS
     configuration = config.generate_from(__doc__)
 
     # RUN EVOLACC
-    print('CONFIGURATION…')
+    LOGGER.info('CONFIGURATION…')
     ea = EvolAcc(configuration)
-    print('DONE !')
-    print('START THE SIMULATION…')
+    LOGGER.info('DONE !')
+
+    LOGGER.info('START THE SIMULATION…')
     ea.start()
-    print('DONE !')
+    LOGGER.info('DONE !')
 
 
 
