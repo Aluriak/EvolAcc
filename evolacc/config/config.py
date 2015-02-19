@@ -77,7 +77,7 @@ def generate_from(docstring):
     # CREATE COMMAND LINE ARGUMENTS CONFIGURATION
     config_args = __parse_from_doc(docstring)
 
-    # TODO: CREATE FILE CONFIGURATION
+    # CREATE FILE CONFIGURATION
     config_file = __parse_from_file(
         config_args.get(CONFIG_FILE, FILENAME_CONFIG)
     )
