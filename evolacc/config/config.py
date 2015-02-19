@@ -24,8 +24,9 @@ trigger saving or loading of (non-)existing configurations.
 # IMPORTS               #
 #########################
 from evolacc.staticgenome import Genome
-from evolacc.factory      import UnitFactory
 from evolacc.observer     import Observer
+from evolacc.factory      import UnitFactory
+from evolacc.config       import LOGGER
 from evolacc              import VERSION_LONG
 
 from docopt      import docopt
@@ -320,12 +321,13 @@ def __import_user_classes(dirname, classes_names, class_check=lambda x: True):
                 if class_check(attr):
                     classes.append(attr)
                 else:
-                    print("WARNING: " + attr_name + " don't verify class_check() predicat.") # TODO: replace by logging
+                    LOGGER.warning(attr_name 
+                                    + " don't verify class_check() predicat"
+                                   )
     if len(remain_classes) > 0:
-        # TODO: replace by logging
-        print("WARNING: classes not found: "
+        LOGGER.warning("classes not found: "
               + ','.join((str(g) for g in remain_classes))
-             )
+        )
     return classes
 
 
