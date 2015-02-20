@@ -1,5 +1,5 @@
 # HOW TO
-This file describes things that can be performed with EvolAcc 0.1.0.  
+This file describes things that can be performed with __EvolAcc 0.1.0__.  
 So, this is something like a usecase tutorial, for final users and for developpers !
 
 
@@ -23,16 +23,43 @@ Firstly, the principle and goals of Simulation must be determined. *Two species 
 which will be the most adaptated to a (un)stable world ?*, *A eat B, B eat C and C eat A ; is it possible to find rules that describes evolution of this world ?*, 
 or others *in a world with poles and equator, is a speciation possible ?*.
   
-Many classes can be usefuls, all need to be defined in *evolacc/userdata/* repertory:
-- one or many Genomes, that describes behavior and caracteristics of life Units;
-- one or many Factories, for generates the world according to the needs;
-- one or many Actions, that permit to Genomes to act on world;
-- one or many Watchers, that allow user to study results;
-All these classes can be put in only one, or heavily use already defined objects (notabily Actions and Watchers).
+For do that, its necessary to create a package in *evolacc/userdata/simulations/* repertory. 
+This package must describes at least one function called *create_configuration*, that return a dictionnary that contain parameters of the simulation.
+This function can easily be define in the *__init__.py* file, where some imports can be performed.
+Stupid example that run an empty simulation:
 
-Once all theses objects are defined, EvolAcc can be launched:
+        from evolacc.config import UNIVERSE_SIZE, STEPS_AT_START
 
-        python -m evolacc --universe_size=100,100 --factories=MyFactory1,MyFactory2 --step_at_start=1000 --watchers=MyWatcher1,MyWatcher2,MyWatcher2
+        def create_configuration():
+            return {}
+                UNIVERSE_SIZE  : [20,20],
+                STEPS_AT_START : 150,
+            }
+
+More interesting one:
+
+        from evolacc.config  import UNIVERSE_SIZE, FACTORY_CLASSES, STEPS_AT_START
+        from evolacc.factory import FactoryExample
+
+        def create_configuration():
+            return {}
+                UNIVERSE_SIZE  : [20,20],
+                FACTORY_CLASSES: [FactoryExample],
+                STEPS_AT_START : 150,
+            }
+
+Others examples can be found in *evolacc/userdata/simulations/* repertory.
+Once the simulation package is defined, EvolAcc can be launched:
+
+        python -m evolacc --universe_size=100,100 --simulations=MySimulationPackage --step_at_start=1000 --watchers=AGlobalWatcher1,AGlobalWatcher2
+
+
+## Determine priority of configurations
+Configuration of simulation package have an higher priority than command line arguments, 
+that have itself an higher priority than configuration file, 
+that have itself an higher priority than default configuration hardcoded in config module.
+
+So, a simulation have a total control on how its used by EvolAcc.
 
 
 ## Game of Life in universe of 100 by 100 for 100 phases
@@ -44,10 +71,10 @@ In EvolAcc, it can be design like this:
 - the FunctionCall Action will be used for implementation of state switching; 
 - a watcher that print alive and dead cells;
 
-All these things are already implemented in *evolacc/userdata/factories/gol.py*, *evolacc/userdata/watchers/gol.py* and *evolacc/userdata/genomes/gol.py* files.
-Developpers are encouraged to take a look to these classes before code their own ones.  
+All these things are already implemented in simulation *gol*, that can be find in *evolacc/userdata/simulations/gol/* repertory.
+Developpers are encouraged to take a look to these classes before code their own simulation.  
 So, launch a Game of Life for 100 phases and in a world of 100 by 100 can be performed by:
 
-        python -m evolacc --factory=GolFactory --universe_size=1000,1000 --step_at_start=100 --watchers=GolWatcher
+        python -m evolacc --simulations=gol --universe_size=100,100 --step_at_start=100
 
 
