@@ -124,7 +124,6 @@ def __parse_from_file(filename=FILENAME_CONFIG):
     Collect information from config file, formatted in json.
     Return a dictionnary with all interesting options.
     Wait optionnaly the config filename.
-    NOT IMPLEMENTED
     """
     try:
         with open(filename, 'r') as f:
