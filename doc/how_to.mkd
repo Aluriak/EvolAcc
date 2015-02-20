@@ -78,3 +78,12 @@ So, launch a Game of Life for 100 phases and in a world of 100 by 100 can be per
         python -m evolacc --simulations=gol --universe_size=100,100 --step_at_start=100
 
 
+## Use global Action, Component, Factory and Watcher
+It can be useful, when a Simulation is defined, to add some things to it.
+A good example is the complementing of a simulation by a factory that add data to simulation, or by a watcher that will give a look to the simulation.
+
+Global classes must be defined in *evolacc/userdata/global/* directory, according to their role (Action, Component, Factory or Watcher).
+They can be given through *FACTORY_CLASSES* and related keys in a configuration object, or by command line arguments.
+
+        python -m evolacc --simulations=gol --watchers=AGlobalWatcher
+
