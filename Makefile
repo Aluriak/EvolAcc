@@ -4,6 +4,10 @@
 gol:
 	python -m evolacc --simulations=gol --steps_at_start=20
 
+ggol:
+	# test of use of global watcher
+	python -m evolacc --simulations=gol --steps_at_start=20 --watchers=ImageGenerator
+
 save_config:
 	python3 -m evolacc --save_config
 
