@@ -66,10 +66,10 @@ UNIVERSE_SIZE   = 'universe_size'
 GENOMES_CLASSES = 'genomes'
 FACTORY_CLASSES = 'factories'
 WATCHER_CLASSES = 'watchers'
+SIMULATIONS     = 'simulations'
 CONFIG_FILE     = 'config_file'
 STEPS_AT_START  = 'steps_at_start'
 # configuration keys flags
-SAVE_CONFIG_FILE= 'save_config'
 
 
 
@@ -81,8 +81,8 @@ def generate_from(docstring):
     """
     Collect information from given docstring,
     configuration file, and default values.
-    Generate and return a dict like object
-    that have all keys accessibles.
+    Generate and return a list of dict-like objects
+    that have all configuration keys usable.
     """
     # CREATE COMMAND LINE ARGUMENTS CONFIGURATION
     config_args = __parse_from_doc(docstring)
@@ -97,11 +97,40 @@ def generate_from(docstring):
 
     # CREATE AND READ FLAGS
     configuration = ChainMap({}, config_args, config_file, config_default)
-    if configuration[SAVE_CONFIG_FILE]:
-        __save_config_file(dict(configuration))
 
-    # RETURN FINAL CONFIGURATION
-    return configuration
+    # CREATE SIMULATION CONFIGURATIONS
+    configurations = []
+    for simulation in configuration[SIMULATIONS]:
+        # merge: like update, but with cumulation of classes and modules
+        configurations.append(__merge_configurations(
+            dict(configuration), 
+            simulation.create_configuration()
+        ))
+
+    # RETURN SIMULATION CONFIGURATIONS
+    return configurations
+
+
+
+
+#########################
+# MERGE CONFIGURATIONS  #
+#########################
+def __merge_configurations(cfg1, cfg2):
+    """Like update cfg1 with cfg2 values, but take count of some merge
+    exceptions, notabily for classes and modules.
+    Don't modify given dict, and return a new one"""
+    # merged_conf is now the result, excepts exceptions
+    merged_conf = dict(cfg1) 
+    merged_conf.update(cfg2)
+
+    # treat exceptions
+    for key in (GENOMES_CLASSES, FACTORY_CLASSES, WATCHER_CLASSES, SIMULATIONS):
+        merged_conf[key] = cfg1.get(key, []) + cfg2.get(key, [])
+
+    # end !
+    return merged_conf
+
 
 
 
@@ -180,14 +209,12 @@ def __default_configuration():
     from evolacc.factory import FactoryExample
 
     return {
-        UNIVERSE_SIZE   : [10,10],
-        GENOMES_CLASSES : [], # no genome
-        WATCHER_CLASSES : [], # no watcher
-        FACTORY_CLASSES : [FactoryExample],
-        CONFIG_FILE     : FILENAME_CONFIG,
-        STEPS_AT_START  : 1,
-        # FLAGS
-        SAVE_CONFIG_FILE: False,
+        UNIVERSE_SIZE    : [10,10],
+        GENOMES_CLASSES  : [], # no genomes
+        WATCHER_CLASSES  : [], # no watchers
+        FACTORY_CLASSES  : [], # no factories
+        CONFIG_FILE      : FILENAME_CONFIG,
+        STEPS_AT_START   : 0,  # no computing
     }
 
 
@@ -258,28 +285,34 @@ def __converted(configuration):
             int(_) for _ in configuration[UNIVERSE_SIZE].split(',')
         ))
 
-    # import users genomes
+    # import global genomes
     if GENOMES_CLASSES in configuration:
         configuration[GENOMES_CLASSES] = __import_user_classes(
-            DIRCNAME_USER_GENOMES,
+            DIRNAME_GLOBAL_GENOMES,
             configuration[GENOMES_CLASSES].split(','),
             lambda g: issubclass(g, Genome)
         )
 
-    # import users watchers
+    # import global watchers
     if WATCHER_CLASSES in configuration:
         configuration[WATCHER_CLASSES] = __import_user_classes(
-            DIRCNAME_USER_WATCHERS,
+            DIRNAME_GLOBAL_WATCHERS,
             configuration[WATCHER_CLASSES].split(','),
             lambda w: issubclass(w, Observer)
         )
 
-    # import users factories
+    # import global factories
     if FACTORY_CLASSES in configuration:
         configuration[FACTORY_CLASSES] = __import_user_classes(
-            DIRCNAME_USER_FACTORIES,
+            DIRNAME_GLOBAL_FACTORIES,
             configuration[FACTORY_CLASSES].split(','),
             lambda w: issubclass(w, UnitFactory)
+        )
+
+    # import simulations
+    if SIMULATIONS in configuration:
+        configuration[SIMULATIONS] = __import_user_simulations(
+            configuration[SIMULATIONS].split(',')
         )
 
     # steps number need are integers 
@@ -292,7 +325,49 @@ def __converted(configuration):
 
 
 #########################
-# IMPORT USER GENOMES   #
+# IMPORT USER SIMULATION#
+#########################
+def __import_user_simulations(simulations_names, 
+                              dirname=DIRNAME_SIMULATIONS):
+    """
+    Import simulations of given name.
+    A simulation must define a callable update_configuration when imported, 
+    that will update configuration.
+    Return a list of imported simulations.
+    An error will be reported if asked simulation is not found, and 
+    None will be return.
+    """
+    def check_sim(sim):
+        return (func_create_conf_name in sim.__dict__
+                and callable(sim.__dict__[func_create_conf_name]))
+
+    # initializations
+    func_create_conf_name = SIMULATION_CREATE_CONFIG_FUNCTION
+    remain_simulations = set(m for m in simulations_names if m != '')
+    simulation_names   = list(remain_simulations)
+    simulations        = []
+
+    # collect all expected modules
+    for simulation_name in simulation_names:
+        simulation_path = (dirname+'.'+simulation_name).replace('/', '.')
+        module = importlib.import_module(simulation_path, package=PKG_NAME)
+        # verify conditions
+        if check_sim(module):
+            remain_simulations.remove(simulation_name)
+            simulations.append(module)
+        else:
+            LOGGER.error("Simulation '"+simulation_name+"' have no "
+                        +"callable member '"+func_create_conf_name
+                        +"'. Please create one.")
+    return simulations
+
+
+
+
+
+
+#########################
+# IMPORT USER CLASSES   #
 #########################
 def __import_user_classes(dirname, classes_names, class_check=lambda x: True):
     """
