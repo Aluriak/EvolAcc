@@ -183,6 +183,7 @@ def __save_config_file(configuration):
     """Save given configuration in configuration file in JSON format.
     Filename used is taken from configuration itself.
     First call __normalized() operation of received configuration.
+    NOT USED CURRENTLY, KEEPED FOR FUTURE.
     """
     try:
         with open(configuration[CONFIG_FILE], 'w') as f:
