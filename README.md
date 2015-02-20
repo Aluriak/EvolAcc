@@ -32,7 +32,6 @@ API can drastically change while in Beta. (<1.0.0)
 - more actions, watchers, genomes;
 - pypi upload;
 - improve config module implementation, because its hard to add an option now;
-- change the way to define a simulation, that will use principle of packages;
 
 ### 0.1.0
 Current version. 
