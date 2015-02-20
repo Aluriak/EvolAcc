@@ -12,6 +12,7 @@ For add a new option, the developper need to:
 Some things may be necessary, according to what is the option goal:
 - if it need to be casted in a particular format, *__normalized* and *__converted* functions must be completed;
 - if a default value exist, then it add to be put in *__default_configuration* function;
+- if needed, add manually the field to the config file, or use *--save_config* flag for erase and rewrite it;
   
 This done, the remain work is to use it !  
 
