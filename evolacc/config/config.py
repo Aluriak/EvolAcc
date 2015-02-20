@@ -47,11 +47,20 @@ import os
 # package
 PKG_NAME = 'evolacc'
 # directories and files names
-DIRCNAME_USER           = 'evolacc/userdata/'
-DIRCNAME_USER_GENOMES   = DIRCNAME_USER    +'genomes/'
-DIRCNAME_USER_FACTORIES = DIRCNAME_USER    +'factories/'
-DIRCNAME_USER_WATCHERS  = DIRCNAME_USER    +'watchers/'
-FILENAME_CONFIG         = 'data/inputs/config.json'
+DIRNAME_USER               = PKG_NAME+'/userdata/'
+DIRNAME_SIMULATIONS        = DIRNAME_USER     +'simulations'
+DIRNAME_GLOBAL             = DIRNAME_USER     +'global/'
+DIRNAME_GLOBAL_GENOMES     = DIRNAME_GLOBAL          +'genomes/'
+DIRNAME_GLOBAL_FACTORIES   = DIRNAME_GLOBAL          +'factories/'
+DIRNAME_GLOBAL_WATCHERS    = DIRNAME_GLOBAL          +'watchers/'
+
+# data repertory
+DIRNAME_INPUTS             = 'data/inputs/'
+DIRNAME_OUTPUTS            = 'data/outputs/'
+FILENAME_CONFIG             = DIRNAME_INPUTS+'config.json'
+# name of function that must be in all simulations
+SIMULATION_CREATE_CONFIG_FUNCTION = 'create_configuration'
+
 # configuration keys
 UNIVERSE_SIZE   = 'universe_size'
 GENOMES_CLASSES = 'genomes'
