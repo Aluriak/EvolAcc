@@ -162,15 +162,14 @@ def __parse_from_file(filename=FILENAME_CONFIG):
     Collect information from config file, formatted in json.
     Return a dictionnary with all interesting options.
     Wait optionnaly the config filename.
-    NOT IMPLEMENTED
     """
     try:
         with open(filename, 'r') as f:
             payload = json.load(f)
         conf = __converted(payload)
     except FileNotFoundError:
-        print('File ' + filename + ' not found !')
-        print('Default configuration will be used.')
+        LOGGER.warning("File '" + filename + "' not found ! "
+                       +"Default configuration will be used.")
         conf = {}
     finally:
         return conf
@@ -398,18 +397,18 @@ def __import_user_classes(dirname, classes_names, class_check=lambda x: True):
         # import user module
         module = importlib.import_module(module, package=PKG_NAME)
         # collect expected classes
-        for attr_name in module.__dict__.keys():
-            attr = module.__getattribute__(attr_name)
-            if attr_name in classes_names:
+        for attr_name in set(remain_classes):
+            if attr_name in module.__dict__.keys():
+                attr = module.__getattribute__(attr_name)
                 remain_classes.remove(attr_name)
                 if class_check(attr):
                     classes.append(attr)
                 else:
-                    LOGGER.warning(attr_name 
+                    LOGGER.warning("__import_user_classes(): " + attr_name 
                                     + " don't verify class_check() predicat"
                                    )
     if len(remain_classes) > 0:
-        LOGGER.warning("classes not found: "
+        LOGGER.warning("__import_user_classes(): classes not found: "
               + ','.join((str(g) for g in remain_classes))
         )
     return classes
