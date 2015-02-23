@@ -31,7 +31,7 @@ Stupid example that run an empty simulation:
         from evolacc.config import UNIVERSE_SIZE, STEPS_AT_START
 
         def create_configuration():
-            return {}
+            return {
                 UNIVERSE_SIZE  : [20,20],
                 STEPS_AT_START : 150,
             }
@@ -42,7 +42,7 @@ More interesting one:
         from evolacc.factory import FactoryExample
 
         def create_configuration():
-            return {}
+            return {
                 UNIVERSE_SIZE  : [20,20],
                 FACTORY_CLASSES: [FactoryExample],
                 STEPS_AT_START : 150,
