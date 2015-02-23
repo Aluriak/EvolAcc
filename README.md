@@ -7,8 +7,9 @@ Moreover, EvolAcc is totally extendable and provides tools for simplify observat
 
 ## Dependencies
 EvolAcc uses Python 3 and some pip installable python modules:
-- docopt
-See *requirements.txt* file for more info.
+- docopt  
+
+See *requirements.txt* file for more info.  
 Pip allow quick installation of all modules with :
 
         pip install -r requirements.txt
@@ -32,7 +33,6 @@ API can drastically change while in Beta. (<1.0.0)
 - more actions, watchers, genomes;
 - pypi upload;
 - improve config module implementation, because its hard to add an option now;
-- change the way to define a simulation, that will use principle of packages;
 
 ### 0.1.0
 Current version. 
