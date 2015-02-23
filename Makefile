@@ -2,7 +2,11 @@
 # RUNNING
 ###############################################################################
 gol:
-	python -m evolacc --factories=GolFactory --universe_size=20,20 --steps_at_start=20 --watchers=GolWatcher
+	python -m evolacc --simulations=gol --steps_at_start=20
+
+ggol:
+	# test of use of global watcher
+	python -m evolacc --simulations=gol --steps_at_start=20 --watchers=ImageGenerator
 
 save_config:
 	python3 -m evolacc --save_config

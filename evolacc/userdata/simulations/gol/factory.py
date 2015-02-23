@@ -7,9 +7,9 @@
 #########################
 # IMPORTS               #
 #########################
-from evolacc.userdata.genomes.gol    import GolCell
-from evolacc.factory                 import UnitFactory
-from functools                       import partial
+from evolacc.userdata.simulations.gol.genome import GolCell
+from evolacc.factory                         import UnitFactory
+from functools                               import partial
 import random
 
 
