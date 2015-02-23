@@ -19,7 +19,8 @@ Options:
     --universe_size=COUNT[,COUNT]   size of universe in each dimension
     --genomes=NAME[,NAME]           names of Genome classes used
     --watchers=NAME[,NAME]          names of Watcher classes to add to simulation
-    --factories=NAME                names of used factory classes
+    --factories=NAME[,NAME]         names of used factory classes
+    --simulations=NAME[,NAME]       names of simulations that will be launched
     --save_config                   save configuration in the config file
     --config_file=FILE              config file
     --steps_at_start=COUNT          number of phase computed after initialization
@@ -28,7 +29,6 @@ Options:
 #########################
 # IMPORTS               #
 #########################
-from evolacc.config   import init_logging
 from evolacc.evolacc  import EvolAcc
 from evolacc.config   import UNIVERSE_SIZE, LOGGER
 import evolacc.config as config
@@ -39,9 +39,6 @@ import evolacc.config as config
 # MAIN                  #
 #########################
 if __name__ == '__main__':
-    # START LOGGING
-    init_logging()
-
     # PARSE ARGS
     configuration = config.generate_from(__doc__)
 

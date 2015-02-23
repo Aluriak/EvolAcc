@@ -27,11 +27,17 @@ from evolacc.config     import LOGGER
 class EvolAcc:
     """
     Currently, EvolAcc can only do only one simulation.
+    (the first given)
     """
 
 
 # CONSTRUCTOR #################################################################
-    def __init__(self, configuration):
+    def __init__(self, configurations):
+        if len(configurations) >= 1:
+            configuration = configurations[0]
+        else: # 0 or less objects
+            raise ValueError
+
         LOGGER.info('configuration:' + str(dict(configuration)))
         self.simulation = Simulation(configuration)
 
