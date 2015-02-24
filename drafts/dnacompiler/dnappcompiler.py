@@ -7,8 +7,11 @@
 #########################
 # IMPORTS               #
 #########################
-from math import log, ceil
-from collections import defaultdict
+from   math import log, ceil
+from   itertools import zip_longest
+from   functools import partial
+import itertools
+import re
 
 
 
@@ -16,82 +19,274 @@ from collections import defaultdict
 #########################
 # PRE-DECLARATIONS      #
 #########################
+# lexems seens in structure
+LEXEM_TYPE_CONDITION = 'C'
+LEXEM_TYPE_ACTION    = 'A'
+LEXEM_TYPE_PREDICAT  = 'P'
+LEXEM_TYPE_DOWNLEVEL = 'D'
+# lexems only seen in values
+LEXEM_TYPE_COMPARISON   = 'C'
+LEXEM_TYPE_OPERATOR     = 'O'
 
 
 
 #########################
-# CLASS                 #
+# DNACOMPILER CLASS     #
 #########################
 class DNACompiler():
     """
+    Compiler of code write with any vocabulary. ('01', 'ATGC', 'whatevr',…)
+    A source code is an ordered list of vocabulary elements 
+        ('10011010000101', 'AGGATGATCAGATA', 'wtrvwhttera'…).
+    The source code is readed by following this format:
+
+        ....|......................|............................
+        HEAD      STRUCTURE                  VALUES
+
+    The HEAD defines:
+        - where STRUCTURE and VALUES start in the code (two integer):
+    The STRUCTURE defines:
+        - logic of the code;
+        - lexems type that will be used;
+    The VALUES defines:
+        - what are the exact value of each lexem;
+
+    Example of STRUCTURE:
+    "
+        if C:
+            A
+            if C:
+                A
+                A
+                if P and P:
+                    A
+                    A
+                A
+            if P:
+                A
+    "
+    VALUES will describes which is the value effectively used for each
+    lexem, C, A or P. (condition, action, predicat)
+    NB: D is the char that indicate a indent level decrease
 
 
     UNIT TESTS:
         >>> from dnacompiler import DNACompiler
-        >>> cc = DNACompiler(alphabet='01', vocabulary=['ha', 'do', 'ken', 'ka', 'me'])
-        >>> sorted(cc.tables.items())
-        [('000', 'ha'), ('001', 'me'), ('010', 'ken'), ('100', 'do'), ('110', 'ka')]
-        >>> cc.compile('000100010110001000001000')
-        'hadokenkamehameha'
+
 
     """
-    # CONSTRUCTOR #################################################################
-    def __init__(self, alphabet, vocabulary):
+# CONSTRUCTOR #################################################################
+    def __init__(self, alphabet, voc_structure, voc_values):
         """"""
-        self.alphabet, self.vocabulary = alphabet, []
-        for class_, voc in vocabulary.items():
-            for word in voc:
-                self.vocabulary.append((class_,) + word)
-        self._initialize()
+        self.alphabet = alphabet
+        self.voc_structure, self.voc_values = vocabulary_struct, voc_values
+        self._initialize_tables()
+        print(self.table_struct)
+        print(self.table_values)
 
 
 # PUBLIC METHODS ##############################################################
     def compile(self, source_code, post_treatment=''.join):
         """Return object code"""
-        def cutter(seq, block_size):
-            for index in range(0, len(seq), block_size):
-                yield self._lexems[seq[index:index+block_size]]
-
-        object_code = self._pythonize(cutter(source_code, self.lexem_size))
-        return object_code if post_treatment is None else post_treatment(object_code)
+        # read structure
+        structure = self._structure(source_code)
+        print(DNACompiler.prettify_struct(structure))
+        print(self._struct_to_values(structure, source_code))
+        obj_code = self._pythonized(
+            structure, self._struct_to_values(structure, source_code)
+        )
+        # apply post treatment and return
+        return obj_code if post_treatment is None else post_treatment(obj_code)
 
 
 # PRIVATE METHODS #############################################################
-    def _initialize(self):
-        """Create"""
-        len_alph = len(self.alphabet)
-        self.lexem_size = ceil(log(len(self.vocabulary), len_alph))
+    def _initialize_tables(self):
+        """Create tables for structure and values, word->vocabulary"""
+        # structure table
+        self.table_struct, self.idnt_struct_size = DNACompiler.create_struct_table(
+            self.alphabet, self.voc_structure
+        )
+        # values table
+        self.table_values, self.idnt_values_size = DNACompiler.create_values_table(
+            self.alphabet, self.voc_values
+        )
+
+    def _structure(self, source_code):
+        """return structure in ACDP format."""
+        # define cutter as a per block reader
+        def cutter(seq, block_size):
+            for index in range(0, len(seq), block_size):
+                lexem = seq[index:index+block_size]
+                if len(lexem) == block_size:
+                    yield self.table_struct[seq[index:index+block_size]]
+        return tuple(cutter(source_code, self.idnt_struct_size))
+
+    def _pythonized(self, structure, values):
+        """Return python code associated to given structure and values"""
+        print('SOURCE:', structure, values)
+        python_code = ""
+        stack = []
+        push = lambda x: stack.append(x)
+        pop  = lambda  : stack.pop()
+        last = lambda  : stack[-1] if len(stack) > 0 else ' '
+        def indented_code(s, level):
+            return '\t'*level + s + '\n'
+
+        level = 0
+        CONDITIONS = [LEXEM_TYPE_PREDICAT, LEXEM_TYPE_CONDITION]
+        ACTION = LEXEM_TYPE_ACTION
+        DOWNLEVEL = LEXEM_TYPE_DOWNLEVEL
+        for lexem_type in structure:
+            if lexem_type is ACTION:
+                if last() in CONDITIONS:
+                    value, values = values[0:len(stack)], values[len(stack):]
+                    python_code += indented_code('if ' + ' and '.join(value) + ':', level)
+                    stack = []
+                    level += 1
+                python_code += indented_code(values[0], level)
+                values = values[1:]
+            elif lexem_type in CONDITIONS:
+                push(lexem_type)
+            elif lexem_type is DOWNLEVEL:
+                level = max(level-1, 0)
+        return python_code
+
+    def _struct_to_values(self, structure, source_code):
+        """Return list of values readed in source_code, 
+        according to given structure.
+        """
+        # iterate on source_code until all values are finded
+        iter_source_code = itertools.cycle(source_code)
+        values = []
+        for lexem_type in (l for l in structure if l is not 'D'):
+            if lexem_type is LEXEM_TYPE_CONDITION:
+                values.append(self.next_condition_lexems(
+                    iter_source_code
+                ))
+            else:
+                values.append(self.next_lexem(
+                    lexem_type, iter_source_code
+                ))
+
+        return values
+
+    def next_lexem(self, lexem_type, source_code):
+        """Return next readable lexem of given type in source_code"""
+        # define reader as a lexem extractor
+        def reader(seq, block_size):
+            identificator = ''
+            for char in source_code:
+                identificator += char
+                if len(identificator) == self.idnt_values_size:
+                    #print(identificator, lexem_type)
+                    yield self.table_values[lexem_type][identificator]
+                    identificator = ''
+        lexem_reader = reader(source_code, self.idnt_values_size)
+        lexem = None
+        while lexem is None: lexem = next(lexem_reader)
+        # here we have found a lexem
+        return lexem
+        
+    def next_condition_lexems(self, source_code):
+        """Return condition lexem readed in source_code"""
+        # find three lexems
+        lvl = self.next_lexem(LEXEM_TYPE_COMPARISON, source_code)
+        loc = self.next_lexem(LEXEM_TYPE_OPERATOR  , source_code)
+        lvr = self.next_lexem(LEXEM_TYPE_COMPARISON, source_code)
+        # here we have found a lexem
+        return ' '.join((lvl, loc, lvr))
+        
+
+
+    def string_to_int(s):
+        """Read an integer in s, in Little Indian. """
+        base = len(self.alphabet)
+        return sum((l * base**lsb for lsb, l in enumerate(s)))
+
+    def letter_to_int(l):
+        return ord(l.upper() - 'A')
+
+
+
+
+
+# CLASS METHODS ###############################################################
+    @staticmethod
+    def create_struct_table(alphabet, vocabulary):
+        """Create table identificator->vocabulary, 
+        and return it with size of an identificator"""
+        len_alph = len(alphabet)
+        identificator_size = ceil(log(len(vocabulary), len_alph))
         # create list of lexems 
-        num2alph = lambda x, n: self.alphabet[(x // len_alph**n) % len_alph]
-        lexems = [[str(num2alph(x, n)) for n in range(self.lexem_size)] for x in range(len(self.vocabulary))]
-        # create dict lexem:word
-        self._lexems = defaultdict(str)
-        for lexem, word in zip(lexems, self.vocabulary):
-            self._lexems[''.join(lexem)] = word
+        num2alph = lambda x, n: alphabet[(x // len_alph**n) % len_alph]
+        identificators = [[str(num2alph(x, n)) 
+                           for n in range(identificator_size)
+                          ] 
+                          for x in range(len(vocabulary))
+                         ]
+        # create dict identificator:word
+        identificators_table = {}
+        zip_id_voc = zip_longest(identificators, vocabulary, fillvalue=None)
+        for idt, word in zip_id_voc:
+            identificators_table[''.join(idt)] = word
+        return identificators_table, identificator_size
 
 
-    def _pythonize(self, object_code):
-        """Modify object code"""
-        python_object_code = ""
-        print([_ for _ in object_code])
-        return python_object_code
+    @staticmethod
+    def create_values_table(alphabet, vocabulary):
+        """Create table lexem_type->[identificator->vocabulary], 
+        and return it with size of a lexem"""
+        len_alph = len(alphabet)
+        identificator_size = ceil(log(len(vocabulary), len_alph))
+        # create list of lexems 
+        num2alph = lambda x, n: alphabet[(x // len_alph**n) % len_alph]
+        identificators = [[str(num2alph(x, n)) 
+                           for n in range(identificator_size)
+                          ] 
+                          for x in range(len(vocabulary))
+                         ]
+        # create dict identificator:word
+        identificators_table = {}
+        zip_voc = partial(zip_longest, identificators, fillvalue=None)
+        for lexem_type, lexem in vocabulary.items():
+            identificators_table[lexem_type] = {}
+            d = identificators_table[lexem_type]
+            for idt, word in zip_voc(vocabulary[lexem_type]):
+                d[''.join(idt)] = word
+        return identificators_table, identificator_size
 
+    @staticmethod
+    def prettify_struct(structure):
+        """return string that contain a pretty printing of structure"""
+        print('SOURCE:', structure)
+        object_code = ""
+        stack = []
+        push = lambda x: stack.append(x)
+        pop  = lambda  : stack.pop()
+        last = lambda  : stack[-1] if len(stack) > 0 else ' '
+        def indented_code(s, level):
+            return '\t'*level + s + '\n'
 
-    def valuesFrom(dna, values_count):
-        """Return tuple of values get from reading of given DNA"""
-        # TODO
-        return (1) * values_count
-
+        level = 0
+        CONDITIONS = LEXEM_TYPE_PREDICAT + LEXEM_TYPE_CONDITION
+        ACTION = LEXEM_TYPE_ACTION
+        DOWNLEVEL = LEXEM_TYPE_DOWNLEVEL
+        for lexem in structure:
+            if lexem is ACTION:
+                if last() in CONDITIONS:
+                    object_code += indented_code('if ' + ' and '.join(stack) + ':', level)
+                    stack = []
+                    level += 1
+                object_code += indented_code(lexem, level)
+            elif lexem in CONDITIONS:
+                push(lexem)
+            elif lexem is DOWNLEVEL:
+                level = max(level-1, 0)
+        return object_code
 
 
 # PREDICATS ###################################################################
 # ACCESSORS ###################################################################
-    @property
-    def tables(self):
-        """Return equivalence vocabulary <=> alphabet sequence."""
-        return dict(self._lexems)
-
-
 # CONVERSION ##################################################################
 # OPERATORS ###################################################################
 
@@ -102,23 +297,26 @@ class DNACompiler():
 # FUNCTIONS             #
 #########################
 if __name__ == '__main__':
-    #from random import choice
-    #alphabet = 'ATGC'
-    #source_code = ''.join([choice(alphabet) for _ in range(30)])
-    #cc = DNACompiler(alphabet=alphabet, vocabulary=['ha', 'do', 'ken', 'ka', 'me'])
-    #print(source_code, '=>', cc.compile(source_code))
-
     alphabet = '01'
-    vocabulary = {
-        'condition' : [('universe.temperature', 0), ('life.haveNeighbors', 1)],
-        'logical'   : [('is', 0), ('has', 0)],
-        'cmp'       : [('>', 0), ('==', 0)],
-        'action'    : [('be happy', 2)],
+    vocabulary_struct = [
+        LEXEM_TYPE_CONDITION,
+        LEXEM_TYPE_ACTION,
+        LEXEM_TYPE_PREDICAT,
+        LEXEM_TYPE_DOWNLEVEL,
+    ]
+    vocabulary_values = {
+        LEXEM_TYPE_COMPARISON: ('temperature',),
+        LEXEM_TYPE_PREDICAT  : ('haveNeighbors',),
+        LEXEM_TYPE_ACTION    : ('die', 'duplicate'),
+        LEXEM_TYPE_OPERATOR  : ('>', '==', '<'),
     }
-    source_code = '000100010110001000001000'
-    cc = DNACompiler(alphabet=alphabet, vocabulary=vocabulary)
 
-    print('tables:', cc.tables)
-    print('compilation:', cc.compile(source_code))
+    dc = DNACompiler(alphabet, vocabulary_struct, vocabulary_values)
+    print(dc.compile('110010001010010110101110110110'))
+
+
+
+
+
 
 
