@@ -9,7 +9,7 @@
 #########################
 from   math import log, ceil
 from   itertools import zip_longest
-from   functools import partial
+from   functools import partial, lru_cache
 import itertools
 import re
 
@@ -45,6 +45,7 @@ class DNACompiler():
 
     The HEAD defines:
         - where STRUCTURE and VALUES start in the code (two integer):
+        - where STRUCTURE and VALUES stop  in the code (two integer):
     The STRUCTURE defines:
         - logic of the code;
         - lexems type that will be used;
@@ -88,12 +89,36 @@ class DNACompiler():
 # PUBLIC METHODS ##############################################################
     def compile(self, source_code, post_treatment=''.join):
         """Return object code"""
+        # define size of an integer and four of them in the HEADER
+        integer_size = self._integer_size_lookup(len(source_code))
+        slices = (
+            # bound start  , bound end     , step
+            (0             , integer_size*1,  1),
+            (integer_size*1, integer_size*2,  1),
+            (integer_size*2, integer_size*1, -1),
+            (integer_size*1, 0             , -1),
+
+        )
+        integers = []
+        for slice_beg, slice_end, step in slices:
+            integer = self.string_to_int(source_code[slice_beg:slice_end:step])
+            integers.append(integer % len(source_code))
+        # associate each integer as a bound of STRUCTURE and VALUES
+        integers.sort()
+        print(integers)
+        struct_bounds_beg, struct_bounds_end = integers[0], integers[1]
+        values_bounds_beg, values_bounds_end = integers[2], integers[3]
         # read structure
-        structure = self._structure(source_code)
+        structure = self._structure(
+            source_code[struct_bounds_beg:struct_bounds_end]
+        )
         print(DNACompiler.prettify_struct(structure))
+        # read values
         print(self._struct_to_values(structure, source_code))
         obj_code = self._pythonized(
-            structure, self._struct_to_values(structure, source_code)
+            structure, self._struct_to_values(
+                structure, source_code[values_bounds_beg:values_bounds_end]
+            )
         )
         # apply post treatment and return
         return obj_code if post_treatment is None else post_treatment(obj_code)
@@ -198,15 +223,27 @@ class DNACompiler():
         
 
 
-    def string_to_int(s):
+    @lru_cache(maxsize = 100)
+    def string_to_int(self, s):
         """Read an integer in s, in Little Indian. """
         base = len(self.alphabet)
-        return sum((l * base**lsb for lsb, l in enumerate(s)))
+        return sum((self.letter_to_int(l) * base**lsb 
+                    for lsb, l in enumerate(s)
+                   ))
 
-    def letter_to_int(l):
-        return ord(l.upper() - 'A')
+    @lru_cache(maxsize = None)
+    def letter_to_int(self, l):
+        return self.alphabet.index(l)
 
 
+    def _integer_size_lookup(self, source_code_size):
+        """Find and return the optimal integer size.
+        A perfect integer can address all indexes of 
+        a string of size source_code_size.
+        """
+        return ceil(log(source_code_size, len(self.alphabet)))
+
+        
 
 
 
@@ -312,7 +349,7 @@ if __name__ == '__main__':
     }
 
     dc = DNACompiler(alphabet, vocabulary_struct, vocabulary_values)
-    print(dc.compile('110010001010010110101110110110'))
+    print(dc.compile('111010001010010110101110110110'))
 
 
 
