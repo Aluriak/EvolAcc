@@ -74,7 +74,7 @@ class Simulation(Observable):
 # PRIVATE METHODS #############################################################
     def _invoke_actions(self):
         """Invoke all actions on self, and forget them."""
-        [action.execute(self) for action in self.actions]
+        map(lambda action: action.execute(self), self.actions)
         self.actions = []
 
 

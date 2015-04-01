@@ -59,7 +59,7 @@ A more interesting one:
 Others examples can be found in the *evolacc/userdata/simulations/* directory.
 Once the simulation package is defined, EvolAcc can be launched:
 
-        python -m evolacc --universe_size=100,100 --simulations=MySimulationPackage --step_at_start=1000 --watchers=AGlobalWatcher1,AGlobalWatcher2
+        python -m evolacc --universe_size=100,100 --simulations=MySimulationPackage --steps_at_start=1000 --watchers=AGlobalWatcher1,AGlobalWatcher2
 
 
 ## Determine priority of configurations
@@ -90,7 +90,7 @@ Developpers are encouraged to take a look at these classes before implementing t
 
 For example, launching a Game of Life for 100 phases and in a world of 100 by 100 can be done this way:
 
-        python -m evolacc --simulations=gol --universe_size=100,100 --step_at_start=100
+        python -m evolacc --simulations=gol --universe_size=100,100 --steps_at_start=100
 
 
 ## Use global Action, Component, Factory and Watcher
