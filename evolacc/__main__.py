@@ -23,7 +23,7 @@ Options:
     --simulations=NAME[,NAME]       names of simulations that will be launched
     --save_config                   save configuration in the config file
     --config_file=FILE              config file
-    --steps_at_start=COUNT          number of phase computed after initialization
+    --steps=COUNT                   number of phase computed after initialization
 """
 
 #########################

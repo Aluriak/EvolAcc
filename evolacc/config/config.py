@@ -69,7 +69,7 @@ FACTORY_CLASSES = 'factories'
 WATCHER_CLASSES = 'watchers'
 SIMULATIONS     = 'simulations'
 CONFIG_FILE     = 'config_file'
-STEPS_AT_START  = 'steps_at_start'
+STEPS           = 'steps'
 # configuration keys flags
 
 
@@ -215,7 +215,7 @@ def __default_configuration():
         WATCHER_CLASSES  : [], # no watchers
         FACTORY_CLASSES  : [], # no factories
         CONFIG_FILE      : FILENAME_CONFIG,
-        STEPS_AT_START   : 0,  # no computing
+        STEPS   : 0,  # no computing
     }
 
 
@@ -257,8 +257,8 @@ def __normalized(configuration):
         del configuration[SAVE_CONFIG_FILE]
 
     # steps number need to be ints
-    if STEPS_AT_START in configuration:
-        configuration[STEPS_AT_START] = str(configuration[STEPS_AT_START])
+    if STEPS in configuration:
+        configuration[STEPS] = str(configuration[STEPS])
 
     return configuration
 
@@ -317,8 +317,8 @@ def __converted(configuration):
         )
 
     # steps number need are integers 
-    if STEPS_AT_START in configuration:
-        configuration[STEPS_AT_START] = int(configuration[STEPS_AT_START])
+    if STEPS in configuration:
+        configuration[STEPS] = int(configuration[STEPS])
 
     return configuration
 

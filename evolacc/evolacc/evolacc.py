@@ -10,7 +10,7 @@ Main user-interface object of EvolAcc.
 # IMPORTS               #
 #########################
 from evolacc.simulation import Simulation
-from evolacc.config     import UNIVERSE_SIZE, STEPS_AT_START, WATCHER_CLASSES
+from evolacc.config     import UNIVERSE_SIZE, STEPS, WATCHER_CLASSES
 from evolacc.config     import LOGGER
 
 
@@ -53,7 +53,7 @@ class EvolAcc:
 
     def start(self):
         """Do requested simulation"""
-        for _ in range(self.configuration[STEPS_AT_START]):
+        for _ in range(self.configuration[STEPS]):
             self.run()
 
 # PRIVATE METHODS #############################################################
