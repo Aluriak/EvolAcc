@@ -1,32 +1,40 @@
 # HOW TO
-This file describes things that can be performed with __EvolAcc 0.1.0__.  
-So, this is something like a usecase tutorial, for final users and for developpers !
+
+This file describes things that can be performed with __EvolAcc 0.1.0__.
+This is something like a usecase tutorial, for final users and for developpers !
 
 
 ## Add a new program option
+
 Many options already exists, like *--factory*, *--help* or *--interactive*.
-For add a new option, the developper need to:
+To add a new option, the developper needs to:
 - add new option in *__main__.py* docstring, according to [docopt](http://docopt.org/ ) syntax;
 - add constant name in *config* module (like *UNIVERSE\_SIZE* for example) with associated key;
-  
+
 Some things may be necessary, according to what is the option goal:
-- if it need to be casted in a particular format, *__normalized* and *__converted* functions must be completed;
-- if a default value exist, then it add to be put in *__default_configuration* function;
-- if needed, add manually the field to the config file, or use *--save_config* flag for erase and rewrite it;
-  
-This done, the remain work is to use it !  
+- if it needs to be casted in a particular format, *__normalized* and *__converted* functions must be filled;
+- if a default value exist, then it must be set in *__default_configuration* function;
+- if needed, add manually the field to the config file, or use *--save_config* flag to erase and rewrite it;
+
+This done, the remaining work is to use it !
 
 
-## Create a new simulation 
-Just launch EvolAcc create and run a new Simulation, but the goal of this part is to show what things need to be done for provide new Simulation patterns.  
-Firstly, the principle and goals of Simulation must be determined. *Two species coevolves and each represents the K/r strategy ; 
-which will be the most adaptated to a (un)stable world ?*, *A eat B, B eat C and C eat A ; is it possible to find rules that describes evolution of this world ?*, 
-or others *in a world with poles and equator, is a speciation possible ?*.
-  
-For do that, its necessary to create a package in *evolacc/userdata/simulations/* repertory. 
-This package must describes at least one function called *create_configuration*, that return a dictionnary that contain parameters of the simulation.
-This function can easily be define in the *__init__.py* file, where some imports can be performed.
-Stupid example that run an empty simulation:
+## Create a new simulation
+
+Just launch EvolAcc, create and run a new Simulation !
+
+The goal of this section is to show what things must be done to implement new Simulation patterns.
+First, the principle and goals of Simulation must be determined. For example :
+
+- *Two species coevolves and each represents the K/r strategy ; which will be the most adaptated to a (un)stable world ?*
+- *A eat B, B eat C and C eat A ; is it possible to find rules that describes evolution of this world ?*
+- *in a world with poles and equator, is a speciation possible ?*
+- etc...
+
+To do that, it's necessary to create a package in the *evolacc/userdata/simulations/* directory.
+This package must implement at least one function called *create_configuration*, which will return a hashmap containing parameters of the simulation.
+This function can easily be defined in the `__init__.py` file, where importable objects are specified.
+For example, here is a stupid example that runs an empty simulation:
 
         from evolacc.config import UNIVERSE_SIZE, STEPS_AT_START
 
@@ -36,7 +44,7 @@ Stupid example that run an empty simulation:
                 STEPS_AT_START : 150,
             }
 
-More interesting one:
+A more interesting one:
 
         from evolacc.config  import UNIVERSE_SIZE, FACTORY_CLASSES, STEPS_AT_START
         from evolacc.factory import FactoryExample
@@ -48,42 +56,50 @@ More interesting one:
                 STEPS_AT_START : 150,
             }
 
-Others examples can be found in *evolacc/userdata/simulations/* repertory.
+Others examples can be found in the *evolacc/userdata/simulations/* directory.
 Once the simulation package is defined, EvolAcc can be launched:
 
         python -m evolacc --universe_size=100,100 --simulations=MySimulationPackage --step_at_start=1000 --watchers=AGlobalWatcher1,AGlobalWatcher2
 
 
 ## Determine priority of configurations
-Configuration of simulation package have an higher priority than command line arguments, 
-that have itself an higher priority than configuration file, 
+
+Configuration of simulation package have an higher priority than command line arguments,
+that have itself an higher priority than configuration file,
 that have itself an higher priority than default configuration hardcoded in config module.
 
-So, a simulation have a total control on how its used by EvolAcc.
+With a math-based approach :
+
+    Simulation package > command line > configuration file > hardcoded default
+
+This way, a simulation package is given total control on how the EvolAcc system is set up.
 
 
 ## Game of Life in universe of 100 by 100 for 100 phases
-The Conway's Game of Life is a very simple cellular automaton, 
-and reproduce its behavior is always fun.  
-In EvolAcc, it can be design like this:
+
+The Conway's Game of Life is a very simple cellular automaton, and reproduce its behavior is always fun.
+
+In EvolAcc, it can be implemented like this:
 - a cell is a Unit with a Custom Genome that contain, mainly, a state (alive or dead);
-- an UnitFactory will be designed for create alive or dead cell according to a density;
-- the FunctionCall Action will be used for implementation of state switching; 
+- an UnitFactory will be designed to create alive or dead cell according to a density;
+- the FunctionCall Action will be used for implementation of state switching;
 - a watcher that print alive and dead cells;
 
-All these things are already implemented in simulation *gol*, that can be find in *evolacc/userdata/simulations/gol/* repertory.
-Developpers are encouraged to take a look to these classes before code their own simulation.  
-So, launch a Game of Life for 100 phases and in a world of 100 by 100 can be performed by:
+All these things are already implemented in a simulation package named *gol*, that can be find in the *evolacc/userdata/simulations/gol/* directory.
+Developpers are encouraged to take a look at these classes before implementing their own simulations.
+
+For example, launching a Game of Life for 100 phases and in a world of 100 by 100 can be done this way:
 
         python -m evolacc --simulations=gol --universe_size=100,100 --step_at_start=100
 
 
 ## Use global Action, Component, Factory and Watcher
-It can be useful, when a Simulation is defined, to add some things to it.
-A good example is the complementing of a simulation by a factory that add data to simulation, or by a watcher that will give a look to the simulation.
 
-Global classes must be defined in *evolacc/userdata/global/* directory, according to their role (Action, Component, Factory or Watcher).
-They can be given through *FACTORY_CLASSES* and related keys in a configuration object, or by command line arguments.
+It can be useful, when a Simulation is defined, to add some things around.
+A good example is to improve a simulation adding a factory that injects data into simulation, or a watcher that will allow visualisation of the simulation or on-line data processing.
+
+Global classes must be defined in the *evolacc/userdata/global/* directory, according to their role (Action, Component, Factory or Watcher).
+They can be specified through the *FACTORY_CLASSES* option and its related key in a configuration object, or by command line arguments.
 
         python -m evolacc --simulations=gol --watchers=AGlobalWatcher
 
