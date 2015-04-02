@@ -42,8 +42,8 @@ class Simulation(Observable):
         # create factories
         factories = [f() for f in configuration[FACTORY_CLASSES]]
         # create alterators
-        alterators = [alterator for alterator in factory.alterators() 
-                      for factory in factories]
+        alterators = [alterator for factory in factories 
+                      for alterator in factory.alterators(self)]
         self.alterators_first = [alterator for alterator in alterators 
                                  if alterator.play_first]
         self.alterators_after = [alterator for alterator in alterators 
@@ -67,7 +67,7 @@ class Simulation(Observable):
             self.configuration = configuration
         configuration = self.configuration # use is as shortcut
         # generate steps
-        for _ in steps:
+        for _ in range(times):
             for alterator in self.alterators_first:
                 alterator.step(self)
             for coords, unit in self.placer.items():
