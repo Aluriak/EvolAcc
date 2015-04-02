@@ -21,6 +21,7 @@ Options:
     --watchers=NAME[,NAME]          names of Watcher classes to add to simulation
     --factories=NAME[,NAME]         names of used factory classes
     --simulations=NAME[,NAME]       names of simulations that will be launched
+    --alterators=NAME[,NAME]        names of alterators that will be used
     --save_config                   save configuration in the config file
     --config_file=FILE              config file
     --steps_at_start=COUNT          number of phase computed after initialization
