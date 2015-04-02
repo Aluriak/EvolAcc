@@ -31,11 +31,16 @@ API can drastically change while in Beta. (<1.0.0)
 - Qt GUI;
 - more doc;
 - more actions, watchers, genomes;
+- more tests;
 - pypi upload;
 - improve config module implementation, because its hard to add an option now;
 
-### 0.1.0
+### 0.2.0
 Current version. 
+- includes Alterators as modulable component;
+
+### 0.1.0
+Stable version. 
 - implementation of main architecture;
 - provides some objects for API;
 - basic objects like some actions, and Game of Life implementation;
