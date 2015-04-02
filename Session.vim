@@ -32,7 +32,7 @@ badd +1 evolacc/evolacc/evolacc.py
 badd +1 evolacc/userdata/watchers/gol.py
 badd +11 plop.py
 badd +1 evolacc/config/conflog.py
-badd +0 evolacc/alterator/alterator.py
+badd +1 evolacc/alterator/alterator.py
 argglobal
 silent! argdel *
 argadd ~/Programmation/Projets/EvolAcc/EvolAcc/evolacc/__main__.py
@@ -59,11 +59,11 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 13 - ((12 * winheight(0) + 28) / 56)
+let s:l = 51 - ((50 * winheight(0) + 28) / 56)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-13
+51
 normal! 0
 lcd ~/Programmation/Projets/EvolAcc/EvolAcc
 wincmd w
@@ -78,14 +78,15 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 31 - ((24 * winheight(0) + 28) / 56)
+let s:l = 44 - ((37 * winheight(0) + 28) / 56)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-31
-normal! 01|
+44
+normal! 0
 lcd ~/Programmation/Projets/EvolAcc/EvolAcc
 wincmd w
+2wincmd w
 exe 'vert 1resize ' . ((&columns * 118 + 119) / 239)
 exe 'vert 2resize ' . ((&columns * 120 + 119) / 239)
 tabedit ~/Programmation/Projets/EvolAcc/EvolAcc/evolacc/config/config.py
@@ -163,6 +164,7 @@ normal! zt
 normal! 05|
 lcd ~/Programmation/Projets/EvolAcc/EvolAcc
 wincmd w
+2wincmd w
 exe 'vert 1resize ' . ((&columns * 118 + 119) / 239)
 exe '2resize ' . ((&lines * 28 + 29) / 59)
 exe 'vert 2resize ' . ((&columns * 120 + 119) / 239)
@@ -191,6 +193,7 @@ normal! zt
 62
 normal! 024|
 lcd ~/Programmation/Projets/EvolAcc/EvolAcc
+2wincmd w
 tabedit ~/Programmation/Projets/EvolAcc/EvolAcc/evolacc/placing/placing.py
 set splitbelow splitright
 set nosplitbelow
@@ -214,6 +217,7 @@ normal! zt
 1
 normal! 023|
 lcd ~/Programmation/Projets/EvolAcc/EvolAcc
+2wincmd w
 tabedit ~/Programmation/Projets/EvolAcc/EvolAcc/evolacc/action/basic_actions.py
 set splitbelow splitright
 wincmd _ | wincmd |
@@ -263,6 +267,7 @@ normal! zt
 normal! 019|
 lcd ~/Programmation/Projets/EvolAcc/EvolAcc
 wincmd w
+2wincmd w
 exe 'vert 1resize ' . ((&columns * 118 + 119) / 239)
 exe 'vert 2resize ' . ((&columns * 120 + 119) / 239)
 tabedit ~/Programmation/Projets/EvolAcc/EvolAcc/evolacc/alterator/alterator.py
@@ -288,6 +293,7 @@ normal! zt
 1
 normal! 0
 lcd ~/Programmation/Projets/EvolAcc/EvolAcc
+2wincmd w
 tabedit ~/Programmation/Projets/EvolAcc/EvolAcc/evolacc/unit/unit.py
 set splitbelow splitright
 set nosplitbelow
@@ -311,6 +317,7 @@ normal! zt
 36
 normal! 05|
 lcd ~/Programmation/Projets/EvolAcc/EvolAcc
+2wincmd w
 tabedit ~/Programmation/Projets/EvolAcc/EvolAcc/evolacc/factory/unitfactory.py
 set splitbelow splitright
 set nosplitbelow
@@ -334,6 +341,7 @@ normal! zt
 95
 normal! 0
 lcd ~/Programmation/Projets/EvolAcc/EvolAcc
+2wincmd w
 tabedit ~/Programmation/Projets/EvolAcc/EvolAcc/evolacc/unit/component/component.py
 set splitbelow splitright
 wincmd _ | wincmd |
@@ -383,6 +391,7 @@ normal! zt
 normal! 027|
 lcd ~/Programmation/Projets/EvolAcc/EvolAcc
 wincmd w
+2wincmd w
 exe 'vert 1resize ' . ((&columns * 118 + 119) / 239)
 exe 'vert 2resize ' . ((&columns * 120 + 119) / 239)
 tabedit ~/Programmation/Projets/EvolAcc/EvolAcc/evolacc/staticgenome/staticgenome.py
@@ -408,6 +417,7 @@ normal! zt
 1
 normal! 03|
 lcd ~/Programmation/Projets/EvolAcc/EvolAcc
+2wincmd w
 tabedit ~/Programmation/Projets/EvolAcc/EvolAcc/evolacc/observer/observer.py
 set splitbelow splitright
 wincmd _ | wincmd |
@@ -457,9 +467,10 @@ normal! zt
 normal! 039|
 lcd ~/Programmation/Projets/EvolAcc/EvolAcc
 wincmd w
+2wincmd w
 exe 'vert 1resize ' . ((&columns * 118 + 119) / 239)
 exe 'vert 2resize ' . ((&columns * 120 + 119) / 239)
-tabnext 6
+tabnext 1
 set stal=1
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf
