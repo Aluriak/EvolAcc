@@ -56,6 +56,14 @@ class UnitFactory:
 # PRIVATE METHODS #############################################################
 # PREDICATS ###################################################################
 # ACCESSORS ###################################################################
+    def alterators(self, simulation):
+        """
+        Return an iterable of Alterators that will be added to 
+        and used by Simulation.
+        By default return an empty iterable.
+        """
+        return ()
+
 # CONVERSION ##################################################################
 # OPERATORS ###################################################################
 

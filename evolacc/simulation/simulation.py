@@ -41,6 +41,13 @@ class Simulation(Observable):
         self.placer  = Placer()
         # create factories
         factories = [f() for f in configuration[FACTORY_CLASSES]]
+        # create alterators
+        alterators = [alterator for alterator in factory.alterators() 
+                      for factory in factories]
+        self.alterators_first = [alterator for alterator in alterators 
+                                 if alterator.play_first]
+        self.alterators_after = [alterator for alterator in alterators 
+                                 if not alterator.play_first]
         # call factory for each place in the world
         for coords in Placer.all_coordinates(configuration[UNIVERSE_SIZE]):
             # get a factory generated Unit at generated coords, or None
@@ -60,8 +67,13 @@ class Simulation(Observable):
             self.configuration = configuration
         configuration = self.configuration # use is as shortcut
         # generate steps
-        for coords, unit in self.placer.items():
-            unit.step(self, coords)
+        for _ in steps:
+            for alterator in self.alterators_first:
+                alterator.step(self)
+            for coords, unit in self.placer.items():
+                unit.step(self, coords)
+            for alterator in self.alterators_after:
+                alterator.step(self)
         # invoke actions and notify_observers that a phase is finished
         self._invoke_actions()
         self.notify_observers()
