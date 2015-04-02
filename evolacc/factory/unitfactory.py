@@ -48,9 +48,9 @@ class UnitFactory:
     def create(self, simulation, coords):
         """Return a new Unit, choose randomly in knowed ones, and initialize
         with their components.
-        Can return None if no Unit need to be create.
+        Return None by default, and when if no Unit need to be create.
         """
-        raise NotImplementedError
+        return None
 
 
 # PRIVATE METHODS #############################################################
