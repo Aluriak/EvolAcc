@@ -54,6 +54,7 @@ DIRNAME_GLOBAL             = DIRNAME_USER     +'global/'
 DIRNAME_GLOBAL_GENOMES     = DIRNAME_GLOBAL          +'genomes/'
 DIRNAME_GLOBAL_FACTORIES   = DIRNAME_GLOBAL          +'factories/'
 DIRNAME_GLOBAL_WATCHERS    = DIRNAME_GLOBAL          +'watchers/'
+DIRNAME_GLOBAL_ALTERATORS  = DIRNAME_GLOBAL          +'alterators/'
 
 # data repertory
 DIRNAME_INPUTS             = 'data/inputs/'
@@ -63,14 +64,14 @@ FILENAME_CONFIG             = DIRNAME_INPUTS+'config.json'
 SIMULATION_CREATE_CONFIG_FUNCTION = 'create_configuration'
 
 # configuration keys
-UNIVERSE_SIZE   = 'universe_size'
-GENOMES_CLASSES = 'genomes'
-FACTORY_CLASSES = 'factories'
-WATCHER_CLASSES = 'watchers'
-SIMULATIONS     = 'simulations'
-CONFIG_FILE     = 'config_file'
-STEPS_AT_START  = 'steps_at_start'
-# configuration keys flags
+UNIVERSE_SIZE     = 'universe_size'
+GENOMES_CLASSES   = 'genomes'
+FACTORY_CLASSES   = 'factories'
+WATCHER_CLASSES   = 'watchers'
+ALTERATOR_CLASSES = 'alterators'
+SIMULATIONS       = 'simulations'
+CONFIG_FILE       = 'config_file'
+STEPS             = 'steps'
 
 
 
@@ -210,12 +211,13 @@ def __default_configuration():
     from evolacc.factory import FactoryExample
 
     return {
-        UNIVERSE_SIZE    : [10,10],
-        GENOMES_CLASSES  : [], # no genomes
-        WATCHER_CLASSES  : [], # no watchers
-        FACTORY_CLASSES  : [], # no factories
-        CONFIG_FILE      : FILENAME_CONFIG,
-        STEPS_AT_START   : 0,  # no computing
+        UNIVERSE_SIZE      : [10,10],
+        GENOMES_CLASSES    : [], # no genomes
+        WATCHER_CLASSES    : [], # no watchers
+        FACTORY_CLASSES    : [], # no factories
+        ALTERATOR_CLASSES  : [], # no alterators
+        CONFIG_FILE        : FILENAME_CONFIG,
+        STEPS              : 0,  # no computing
     }
 
 
@@ -241,8 +243,8 @@ def __normalized(configuration):
             str(_) for _ in configuration[UNIVERSE_SIZE]
         ))
 
-    # convert user genomes, factories and watchers
-    for key in (GENOMES_CLASSES, FACTORY_CLASSES, WATCHER_CLASSES):
+    # convert user genomes, factories, watchers and alterators
+    for key in (GENOMES_CLASSES, FACTORY_CLASSES, WATCHER_CLASSES, ALTERATOR_CLASSES):
         if key in configuration:
             # delete it if no object
             if len(configuration[key]) is 0:
@@ -257,8 +259,8 @@ def __normalized(configuration):
         del configuration[SAVE_CONFIG_FILE]
 
     # steps number need to be ints
-    if STEPS_AT_START in configuration:
-        configuration[STEPS_AT_START] = str(configuration[STEPS_AT_START])
+    if STEPS in configuration:
+        configuration[STEPS] = str(configuration[STEPS])
 
     return configuration
 
@@ -294,6 +296,14 @@ def __converted(configuration):
             lambda g: issubclass(g, Genome)
         )
 
+    # import global factories
+    if FACTORY_CLASSES in configuration:
+        configuration[FACTORY_CLASSES] = __import_user_classes(
+            DIRNAME_GLOBAL_FACTORIES,
+            configuration[FACTORY_CLASSES].split(','),
+            lambda w: issubclass(w, UnitFactory)
+        )
+
     # import global watchers
     if WATCHER_CLASSES in configuration:
         configuration[WATCHER_CLASSES] = __import_user_classes(
@@ -302,12 +312,12 @@ def __converted(configuration):
             lambda w: issubclass(w, Observer)
         )
 
-    # import global factories
-    if FACTORY_CLASSES in configuration:
-        configuration[FACTORY_CLASSES] = __import_user_classes(
-            DIRNAME_GLOBAL_FACTORIES,
-            configuration[FACTORY_CLASSES].split(','),
-            lambda w: issubclass(w, UnitFactory)
+    # import global alterators
+    if ALTERATOR_CLASSES in configuration:
+        configuration[ALTERATOR_CLASSES] = __import_user_classes(
+            DIRNAME_GLOBAL_ALTERATORS,
+            configuration[ALTERATOR_CLASSES].split(','),
+            lambda w: issubclass(w, Alterator)
         )
 
     # import simulations
@@ -317,8 +327,8 @@ def __converted(configuration):
         )
 
     # steps number need are integers 
-    if STEPS_AT_START in configuration:
-        configuration[STEPS_AT_START] = int(configuration[STEPS_AT_START])
+    if STEPS in configuration:
+        configuration[STEPS] = int(configuration[STEPS])
 
     return configuration
 

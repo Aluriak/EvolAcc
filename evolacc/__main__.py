@@ -24,7 +24,7 @@ Options:
     --alterators=NAME[,NAME]        names of alterators that will be used
     --save_config                   save configuration in the config file
     --config_file=FILE              config file
-    --steps_at_start=COUNT          number of phase computed after initialization
+    --steps=COUNT                   number of phase computed after initialization
 """
 
 #########################
