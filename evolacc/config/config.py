@@ -50,7 +50,7 @@ PKG_NAME = 'evolacc'
 # directories and files names
 DIRNAME_USER               = PKG_NAME+'/userdata/'
 DIRNAME_SIMULATIONS        = DIRNAME_USER     +'simulations'
-DIRNAME_GLOBAL             = DIRNAME_USER     +'global/'
+DIRNAME_GLOBAL             = DIRNAME_USER     +'globals/'
 DIRNAME_GLOBAL_GENOMES     = DIRNAME_GLOBAL          +'genomes/'
 DIRNAME_GLOBAL_FACTORIES   = DIRNAME_GLOBAL          +'factories/'
 DIRNAME_GLOBAL_WATCHERS    = DIRNAME_GLOBAL          +'watchers/'
