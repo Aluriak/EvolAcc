@@ -7,15 +7,15 @@ This module is here for simplify work of __main__.
 This module provide a decorator for docopt module.
 
 Do something like:
-    import config 
+    import config
     configuration = config.generate_from(__doc__)
 
 Then args will be equal to usable dictionnary like object.
-In fact, this dictionnary will be a ChainMap that will take 
-count, in order, of command-line arguments, configuration file, 
+In fact, this dictionnary will be a ChainMap that will take
+count, in order, of command-line arguments, configuration file,
 and default values defined in this file.
 
-configparser will also intercept some arguments, like those that 
+configparser will also intercept some arguments, like those that
 trigger saving or loading of (non-)existing configurations.
 """
 
@@ -49,12 +49,12 @@ import os
 PKG_NAME = 'evolacc'
 # directories and files names
 DIRNAME_USER               = PKG_NAME+'/userdata/'
-DIRNAME_SIMULATIONS        = DIRNAME_USER     +'simulations'
-DIRNAME_GLOBAL             = DIRNAME_USER     +'globals/'
-DIRNAME_GLOBAL_GENOMES     = DIRNAME_GLOBAL          +'genomes/'
-DIRNAME_GLOBAL_FACTORIES   = DIRNAME_GLOBAL          +'factories/'
-DIRNAME_GLOBAL_WATCHERS    = DIRNAME_GLOBAL          +'watchers/'
-DIRNAME_GLOBAL_ALTERATORS  = DIRNAME_GLOBAL          +'alterators/'
+DIRNAME_SIMULATIONS        = DIRNAME_USER      + 'simulations'
+DIRNAME_GLOBAL             = DIRNAME_USER      + 'globals/'
+DIRNAME_GLOBAL_GENOMES     = DIRNAME_GLOBAL             + 'genomes/'
+DIRNAME_GLOBAL_FACTORIES   = DIRNAME_GLOBAL             + 'factories/'
+DIRNAME_GLOBAL_WATCHERS    = DIRNAME_GLOBAL             + 'watchers/'
+DIRNAME_GLOBAL_ALTERATORS  = DIRNAME_GLOBAL             + 'alterators/'
 
 # data repertory
 DIRNAME_INPUTS             = 'data/inputs/'
@@ -105,7 +105,7 @@ def generate_from(docstring):
     for simulation in configuration[SIMULATIONS]:
         # merge: like update, but with cumulation of classes and modules
         configurations.append(__merge_configurations(
-            dict(configuration), 
+            dict(configuration),
             simulation.create_configuration()
         ))
 
@@ -123,7 +123,7 @@ def __merge_configurations(cfg1, cfg2):
     exceptions, notabily for classes and modules.
     Don't modify given dict, and return a new one"""
     # merged_conf is now the result, excepts exceptions
-    merged_conf = dict(cfg1) 
+    merged_conf = dict(cfg1)
     merged_conf.update(cfg2)
 
     # treat exceptions
@@ -149,7 +149,7 @@ def __parse_from_doc(docstring):
     # Parse args with docopt and keep those are interestings
     args = docopt(docstring, version=VERSION_LONG)
     config_args = {k.lstrip('-'):v         # don't keep the firsts '-'
-                   for k,v in args.items() 
+                   for k,v in args.items()
                    if v is not None and k.startswith('-')}
 
     return __converted(config_args)
@@ -189,13 +189,13 @@ def __save_config_file(configuration):
     """
     try:
         with open(configuration[CONFIG_FILE], 'w') as f:
-            json.dump(__normalized(configuration), f, 
+            json.dump(__normalized(configuration), f,
                       separators=(',', ':'), indent=4)
     except FileNotFoundError:
-        print('WARNING: file ' + configuration[CONFIG_FILE] 
+        print('WARNING: file ' + configuration[CONFIG_FILE]
               + ' not found. No operation performed.')
     except ValueError:
-        print('WARNING: file ' + configuration[CONFIG_FILE] 
+        print('WARNING: file ' + configuration[CONFIG_FILE]
               + ' incorrectly formatted. No operation performed.')
 
 
@@ -233,7 +233,7 @@ def __normalized(configuration):
     For example:
         - functions/classes are replaced by their names.
         - non-string objects are converted in string.
-    This function is the complementary of __converted, 
+    This function is the complementary of __converted,
     and return a serializable view of given configuration.
     """
     configuration = dict(configuration)
@@ -275,7 +275,7 @@ def __converted(configuration):
     Return a converted copy of given configuration.
     Converts all fields that required a conversion.
     For example:
-        - functions/classes names are imported 
+        - functions/classes names are imported
             and replaced by functions/classes themselves.
         - string are converted in integer, float, list…
     This function is the complementary of __normalized,
@@ -326,7 +326,7 @@ def __converted(configuration):
             configuration[SIMULATIONS].split(',')
         )
 
-    # steps number need are integers 
+    # steps number need are integers
     if STEPS in configuration:
         configuration[STEPS] = int(configuration[STEPS])
 
@@ -338,14 +338,14 @@ def __converted(configuration):
 #########################
 # IMPORT USER SIMULATION#
 #########################
-def __import_user_simulations(simulations_names, 
+def __import_user_simulations(simulations_names,
                               dirname=DIRNAME_SIMULATIONS):
     """
     Import simulations of given name.
-    A simulation must define a callable update_configuration when imported, 
+    A simulation must define a callable update_configuration when imported,
     that will update configuration.
     Return a list of imported simulations.
-    An error will be reported if asked simulation is not found, and 
+    An error will be reported if asked simulation is not found, and
     None will be return.
     """
     def check_sim(sim):
@@ -386,8 +386,8 @@ def __import_user_classes(dirname, classes_names, class_check=lambda x: True):
     Given classes_names must be a list of string that contain name of
     wanted classes.
     Given class_check is applied on all returned class.
-    Return a list of class. 
-    If a class is found multiple times, it will be added multiple times. 
+    Return a list of class.
+    If a class is found multiple times, it will be added multiple times.
     If a class is not found, a warning will be reported.
     If application of class_check on a class don't return True, a warning will
     be reported.
@@ -400,8 +400,8 @@ def __import_user_classes(dirname, classes_names, class_check=lambda x: True):
     classes = []
     # open python modules in user classes directory
     # ex: 'evolacc/userclasses/thing.py' -> 'evolacc.userclasses.thing'
-    modules = (dirname.replace('/', '.')+os.path.splitext(f)[0] 
-               for f in os.listdir(dirname) 
+    modules = (dirname.replace('/', '.')+os.path.splitext(f)[0]
+               for f in os.listdir(dirname)
                if os.path.splitext(f)[1] == '.py' and f != '__init__.py'
               )
     # collect all expected classes in userclasses list
@@ -416,7 +416,7 @@ def __import_user_classes(dirname, classes_names, class_check=lambda x: True):
                 if class_check(attr):
                     classes.append(attr)
                 else:
-                    LOGGER.warning("__import_user_classes(): " + attr_name 
+                    LOGGER.warning("__import_user_classes(): " + attr_name
                                     + " don't verify class_check() predicat"
                                    )
     if len(remain_classes) > 0:
