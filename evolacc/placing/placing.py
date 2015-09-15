@@ -45,6 +45,7 @@ class Placer(dict):
 # CONSTRUCTOR #################################################################
     def __init__(self, dimensions=2):
         """Wait for a positiv integer that describes number of dimensions"""
+        super().__init__()
         self.dimensions = dimensions
 
 
