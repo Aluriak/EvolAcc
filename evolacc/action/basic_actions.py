@@ -64,11 +64,15 @@ class Duplicate(Action):
 # PUBLIC METHODS ##############################################################
     def execute(self, simulation):
         """ Duplicate unit in given simulation """
-        assert(simulation.placer.validate(self.coords)) #TODO: replace that by logging
-        nei = simulation.placer.random_free_moore_neighbor(self.coords)
-        if nei is not None: 
-            assert(simulation.placer.place(self.new_unit, nei) is None)
-        #else: no free neighbor
+        if not simulation.storage.validate(self.coords):
+            LOGGER.error('Replace Action: Coordinates ' + str(self.coords) 
+                         + ' are invalid in Simulation ' + str(simulation))
+        else: 
+            nei = simulation.storage.random_free_moore_neighbor(self.coords)
+            if nei is not None: 
+                assert(simulation.storage.place(self.new_unit, nei) is None)
+            #else: no free neighbor
+
 
 
 
