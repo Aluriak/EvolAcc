@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #########################
-#       PLACING         #
+#       PLACER          #
 #########################
 """
 
@@ -33,7 +33,7 @@ from functools import lru_cache
 
 
 #########################
-# CLASS                 #
+# PLACER CLASS          #
 #########################
 class Placer(dict):
     """
@@ -59,7 +59,7 @@ class Placer(dict):
         return previous
 
     def moore_neighbors(self, coords):
-        """Return list of placed objects that are moore neighbors 
+        """Return list of placed objects that are moore neighbors
         of given coords.
         """
         assert(self.validate(coords))
@@ -81,9 +81,9 @@ class Placer(dict):
     @staticmethod
     @lru_cache(maxsize=None)
     def moore_neighbors_offsets(dimensions_count):
-        """Return a tuple of moore neighbors offsets, according to given 
+        """Return a tuple of moore neighbors offsets, according to given
         dimensions count.
-        
+
         >>> from evolacc.placing import Placer
         >>> g = Placer.moore_neighbors_offsets(2)
         >>> len(g)
@@ -110,9 +110,10 @@ class Placer(dict):
         # get all exact coords of potential moore_neighbors
         return (
             sum_coords(nei_rel_coords, coords)
-            for nei_rel_coords 
+            for nei_rel_coords
             in Placer.moore_neighbors_offsets(len(coords))
         )
+
 
 
 # PREDICATS ###################################################################
@@ -128,7 +129,7 @@ class Placer(dict):
 # ACCESSORS ###################################################################
     def random_free_moore_neighbor(self, coords):
         """
-        return randomly choosed free moore neighbors 
+        return randomly choosed free moore neighbors
         of given coords.
         A moore neighbor is free iff there is no object in.
         Return None if no free moore neighbor found
@@ -145,7 +146,7 @@ class Placer(dict):
 
     def free_moore_neighbor(self, coords):
         """
-        return a list of coordinates of free moore neighbors 
+        return a list of coordinates of free moore neighbors
         of given coords.
         A moore neighbor is free iff there is no object in.
         Return None if no free moore neighbor found
@@ -168,11 +169,11 @@ class Placer(dict):
                 a dimnension.
             - dimensions_count is the number of dimensions
         If dimensions_count is not provided:
-            maximal is a list of N values, where N is the number 
+            maximal is a list of N values, where N is the number
                 of dimensions, and each value describes the maximal
                 coordinate reachable for one dimension.
         """
-        if dimensions_count is None: 
+        if dimensions_count is None:
             # if all dimensions have the same maximum bound
             if all(m == maximal[0] for m in maximal):
                 return Placer.all_coordinates(maximal[0], len(maximal))
@@ -193,5 +194,6 @@ class Placer(dict):
 #########################
 # FUNCTIONS             #
 #########################
+
 
 
