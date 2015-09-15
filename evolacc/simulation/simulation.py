@@ -28,7 +28,7 @@ class Simulation(Observable):
     """
     A Simulation is a composition of Units through objects like Placer.
 
-    Simulation is Observable, and is the target of 
+    Simulation is Observable, and is the target of
     Action instances invocations.
     """
 

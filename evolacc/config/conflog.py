@@ -8,7 +8,7 @@
 #########################
 import logging
 from logging.handlers import RotatingFileHandler
- 
+
 
 FILENAME_LOG = 'data/outputs/evolacc.log'
 # create logger 
