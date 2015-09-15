@@ -36,6 +36,7 @@ class Simulation(Observable):
 # CONSTRUCTOR #################################################################
     def __init__(self, configuration):
         super().__init__()
+        self.current_step = 0
         self.configuration = configuration
         self.actions = []
         self.placer  = Placer()
@@ -61,6 +62,7 @@ class Simulation(Observable):
     def step(self, times=1, configuration=None):
         """Apply times phases to simulation. If configuration is provided,
         it will replace the ancient one"""
+        self.current_step += 1
         # configuration management
         if configuration is not None:
             self.configuration = configuration
