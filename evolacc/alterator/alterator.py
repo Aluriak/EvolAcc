@@ -14,7 +14,7 @@ An Alterator receive a reference to the simulation, but, unlike Unit, no coords.
 #########################
 # IMPORTS               #
 #########################
-
+from evolacc.config       import LOGGER
 
 
 
