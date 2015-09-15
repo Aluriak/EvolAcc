@@ -19,7 +19,7 @@ from evolacc.config        import LOGGER
 
 
 #########################
-# KILL ACTION           #
+# KILL ACTION           #
 #########################
 class Kill(Action):
     """
@@ -46,7 +46,7 @@ class Kill(Action):
 
 
 #########################
-# DUPLICATE ACTION      #
+# DUPLICATE ACTION      #
 #########################
 class Duplicate(Action):
     """
@@ -65,11 +65,11 @@ class Duplicate(Action):
     def execute(self, simulation):
         """ Duplicate unit in given simulation """
         if not simulation.storage.validate(self.coords):
-            LOGGER.error('Replace Action: Coordinates ' + str(self.coords) 
+            LOGGER.error('Replace Action: Coordinates ' + str(self.coords)
                          + ' are invalid in Simulation ' + str(simulation))
-        else: 
+        else:
             nei = simulation.storage.random_free_moore_neighbor(self.coords)
-            if nei is not None: 
+            if nei is not None:
                 assert(simulation.storage.place(self.new_unit, nei) is None)
             #else: no free neighbor
 
@@ -78,7 +78,7 @@ class Duplicate(Action):
 
 
 #########################
-# FUNCTOR ACTION        #
+# FUNCTOR ACTION        #
 #########################
 class FunctionCall(Action):
     """
@@ -97,7 +97,7 @@ class FunctionCall(Action):
 
 
 #########################
-# REPLACE GENERATION    #
+# REPLACE GENERATION    #
 #########################
 class ReplaceGeneration(Action):
     """
@@ -117,8 +117,8 @@ class ReplaceGeneration(Action):
         """ Duplicate unit in given simulation """
         for coords, new_unit in zip(self.old_units_coords, self.new_units):
             if simulation.placer.place(new_unit, coords) is None:
-                LOGGER.warning('ReplaceGeneration Action: Coordinates ' 
-                               + str(self.old_units_coords) 
+                LOGGER.warning('ReplaceGeneration Action: Coordinates '
+                               + str(self.old_units_coords)
                                + ' are not occupied')
             #else: it was an ancient unit at given coords
 
