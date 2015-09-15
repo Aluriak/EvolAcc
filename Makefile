@@ -8,6 +8,9 @@ ggol:
 	# test of use of global watcher
 	python -m evolacc --simulations=gol --steps=20 --watchers=ImageGenerator
 
+genalg:
+	python -m evolacc --simulations=genalg --steps=20
+
 save_config:
 	python3 -m evolacc --save_config
 
