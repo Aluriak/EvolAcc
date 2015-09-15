@@ -11,7 +11,7 @@ from evolacc.observer import Observable
 from evolacc.placing  import Placer
 from evolacc.unit     import Unit
 
-from evolacc.config   import UNIVERSE_SIZE, FACTORY_CLASSES
+from evolacc.config   import UNIVERSE_SIZE, FACTORY_CLASSES, ALTERATOR_CLASSES
 
 
 
@@ -42,11 +42,10 @@ class Simulation(Observable):
         # create factories
         factories = [f() for f in configuration[FACTORY_CLASSES]]
         # create alterators
-        alterators = [alterator for factory in factories 
-                      for alterator in factory.alterators(self)]
-        self.alterators_first = [alterator for alterator in alterators 
+        alterators = [a() for a in configuration[ALTERATOR_CLASSES]]
+        self.alterators_first = [alterator for alterator in alterators
                                  if alterator.play_first]
-        self.alterators_after = [alterator for alterator in alterators 
+        self.alterators_after = [alterator for alterator in alterators
                                  if not alterator.play_first]
         # call factory for each place in the world
         for coords in Placer.all_coordinates(configuration[UNIVERSE_SIZE]):
