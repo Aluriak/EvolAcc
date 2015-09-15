@@ -93,15 +93,26 @@ class Simulation(Observable):
 
 # PREDICATS ###################################################################
 # ACCESSORS ###################################################################
-    @staticmethod
+    @property
     def units(self):
         """Return a generator of units"""
         return (u for u in self.placer.values())
 
-    @staticmethod
+    @property
+    def coords_and_units(self):
+        """Return a generator of (coords, unit)"""
+        return ((c, u) for c, u in self.placer.items())
+
+    @property
     def life(self):
         """Return a generator of units that have a genome"""
-        return (u for u in self.placer.values() if u.is_life())
+        return (u for u in self.placer.units() if u.is_life())
+
+    @property
+    def size(self):
+        """Return count of unit in self"""
+        return len(self.placer)
+
 # CONVERSION ##################################################################
 # OPERATORS ###################################################################
 
