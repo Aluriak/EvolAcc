@@ -39,7 +39,7 @@ class Simulation(Observable):
         self.current_step = 0
         self.configuration = configuration
         self.actions = []
-        self.placer  = Placer()
+        self.placer  = Placer(dimensions=len(configuration[UNIVERSE_SIZE]))
         # create factories
         factories = [f() for f in configuration[FACTORY_CLASSES]]
         # create alterators
