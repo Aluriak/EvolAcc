@@ -34,6 +34,9 @@ class EvolAcc:
 # CONSTRUCTOR #################################################################
     def __init__(self, configurations):
         if len(configurations) >= 1:
+            if len(configurations) > 1:
+                LOGGER.warning('configuration: multiple configurations received.' +
+                               ' Only the first one will be used')
             configuration = configurations[0]
         else: # 0 or less objects
             raise ValueError
