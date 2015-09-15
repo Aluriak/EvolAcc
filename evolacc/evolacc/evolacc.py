@@ -53,6 +53,8 @@ class EvolAcc:
 
     def start(self):
         """Do requested simulation"""
+        # perform the first call to all observers
+        self.simulation.notify_observers()
         for _ in range(self.configuration[STEPS]):
             self.run()
 
