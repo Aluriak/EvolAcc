@@ -92,3 +92,31 @@ class FunctionCall(Action):
 
 
 
+#########################
+# REPLACE GENERATION    #
+#########################
+class ReplaceGeneration(Action):
+    """
+    Action that lead to replace all given units of simulation by given ones.
+    """
+# CONSTRUCTOR #################################################################
+    def __init__(self, new_units, old_units_coords=None):
+        """
+        new_units is the iterable of new unit that will be add.
+        old_units_coords can be None, if undo action is unexpected.
+        """
+        self.new_units        = new_units
+        self.old_units_coords = old_units_coords
+
+# PUBLIC METHODS ##############################################################
+    def execute(self, simulation):
+        """ Duplicate unit in given simulation """
+        for coords, new_unit in zip(self.old_units_coords, self.new_units):
+            if simulation.placer.place(new_unit, coords) is None:
+                LOGGER.warning('ReplaceGeneration Action: Coordinates ' 
+                               + str(self.old_units_coords) 
+                               + ' are not occupied')
+            #else: it was an ancient unit at given coords
+
+
+
