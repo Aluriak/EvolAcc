@@ -46,11 +46,11 @@ if __name__ == '__main__':
     # RUN EVOLACC
     LOGGER.info('CONFIGURATION…')
     ea = EvolAcc(configuration)
-    LOGGER.info('DONE !')
+    LOGGER.info('DONE !')
 
-    LOGGER.info('START THE SIMULATION…')
+    LOGGER.info('START THE SIMULATION…')
     ea.start()
-    LOGGER.info('DONE !')
+    LOGGER.info('DONE !')
 
 
 
