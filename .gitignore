@@ -59,3 +59,4 @@ target/
 # vim
 .*.swp
 .*.swo
+*.vim
